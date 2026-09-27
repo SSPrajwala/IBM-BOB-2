@@ -1,0 +1,696 @@
+{
+  "project": "TaskFlow-API",
+  "generated_by": "DevPilot (IBM Bob 2.0 prototype)",
+  "agents_run_in_parallel": [
+    "onboarding",
+    "code_review",
+    "testing",
+    "release_readiness",
+    "modernization",
+    "auto_fix"
+  ],
+  "wall_clock_seconds": 0.288,
+  "sequential_equivalent_seconds": 0.789,
+  "results": {
+    "release_readiness": {
+      "agent": "release_readiness",
+      "dependency_flags": [
+        {
+          "package": "pyyaml",
+          "pinned_version": "5.3",
+          "note": "Versions before 5.4 default `yaml.load()` to the unsafe Loader, allowing arbitrary code execution on untrusted input (fixed by requiring an explicit Loader)."
+        }
+      ],
+      "deployment_checklist": [
+        {
+          "item": "Dockerfile present for reproducible deploys",
+          "status": "pass"
+        },
+        {
+          "item": "Health check endpoint available",
+          "status": "pass"
+        },
+        {
+          "item": "No unresolved high-severity code-review findings",
+          "status": "check with code_review agent output"
+        },
+        {
+          "item": "Dependency advisories reviewed",
+          "status": "attention"
+        },
+        {
+          "item": "Test coverage acceptable for changed endpoints",
+          "status": "check with testing agent output"
+        }
+      ],
+      "release_notes": {
+        "internal": [
+          "New endpoint: GET /tasks/search/by-owner (filter tasks by owner).",
+          "Note for reviewers: this endpoint is flagged by the code-review subagent for a SQL-injection risk -- do not ship until parameterized."
+        ],
+        "customer_facing": [
+          "You can now search your tasks by owner."
+        ]
+      },
+      "recommendation": "NO-GO",
+      "_elapsed_seconds": 0.027
+    },
+    "code_review": {
+      "agent": "code_review",
+      "findings": [
+        {
+          "rule": "sql-injection",
+          "severity": "high",
+          "file": "app/routers/tasks.py",
+          "line": 45,
+          "message": "Query text is built with string formatting instead of parameter binding -- classic SQL-injection entry point.",
+          "confirmed": false
+        },
+        {
+          "rule": "unchecked-lookup",
+          "severity": "medium",
+          "file": "app/routers/tasks.py",
+          "function": "get_task",
+          "message": "`get_task` fetches a single row and returns it without checking for a missing/None result -- a bad id will raise a 500 instead of a 404.",
+          "confirmed": false
+        },
+        {
+          "rule": "unchecked-lookup",
+          "severity": "medium",
+          "file": "app/routers/users.py",
+          "function": "get_user",
+          "message": "`get_user` fetches a single row and returns it without checking for a missing/None result -- a bad id will raise a 500 instead of a 404.",
+          "confirmed": false
+        }
+      ],
+      "counts": {
+        "high": 1,
+        "medium": 2,
+        "low": 0
+      },
+      "rules_checked": 15,
+      "pr_diff_reviewed": {
+        "file": "pr-142-search-by-owner.diff",
+        "lines_added": 9,
+        "risky_lines_added": 1
+      },
+      "summary": "3 finding(s): 1 high, 2 medium, 0 low. Blocking issues found -- recommend requesting changes before merge.",
+      "_elapsed_seconds": 0.11
+    },
+    "onboarding": {
+      "agent": "onboarding",
+      "modules_scanned": 7,
+      "total_loc": 248,
+      "undocumented_modules": [
+        "app/database.py",
+        "app/main.py",
+        "app/models.py",
+        "app/routers/tasks.py",
+        "app/routers/users.py",
+        "tests/test_devpilot_generated.py",
+        "tests/test_tasks.py"
+      ],
+      "has_readme": true,
+      "has_tests": true,
+      "has_dockerfile": true,
+      "architecture_map": [
+        {
+          "file": "tests/test_devpilot_generated.py",
+          "functions": 8,
+          "classes": 0,
+          "documented": false,
+          "loc": 71
+        },
+        {
+          "file": "app/routers/tasks.py",
+          "functions": 5,
+          "classes": 0,
+          "documented": false,
+          "loc": 57
+        },
+        {
+          "file": "app/routers/users.py",
+          "functions": 4,
+          "classes": 0,
+          "documented": false,
+          "loc": 41
+        },
+        {
+          "file": "app/database.py",
+          "functions": 2,
+          "classes": 0,
+          "documented": false,
+          "loc": 27
+        },
+        {
+          "file": "app/models.py",
+          "functions": 0,
+          "classes": 4,
+          "documented": false,
+          "loc": 21
+        },
+        {
+          "file": "tests/test_tasks.py",
+          "functions": 2,
+          "classes": 0,
+          "documented": false,
+          "loc": 16
+        },
+        {
+          "file": "app/main.py",
+          "functions": 1,
+          "classes": 0,
+          "documented": false,
+          "loc": 15
+        }
+      ],
+      "setup_steps": [
+        "pip install -r requirements.txt",
+        "or: docker build -t app . && docker run -p 8000:8000 app",
+        "Entry point detected: app/main.py",
+        "Run the test suite first to confirm a clean baseline before changing anything."
+      ],
+      "starter_tasks": [
+        "Add a module docstring to `app/database.py` explaining its responsibility.",
+        "Add a module docstring to `app/main.py` explaining its responsibility.",
+        "Add a module docstring to `app/models.py` explaining its responsibility.",
+        "Add a module docstring to `app/routers/tasks.py` explaining its responsibility.",
+        "Add a module docstring to `app/routers/users.py` explaining its responsibility.",
+        "Add a module docstring to `tests/test_devpilot_generated.py` explaining its responsibility."
+      ],
+      "_elapsed_seconds": 0.118
+    },
+    "auto_fix": {
+      "agent": "auto_fix",
+      "applied": false,
+      "candidate_fixes": [
+        {
+          "file": "app/routers/tasks.py",
+          "fixes": [
+            "Parameterized the query built from `query`.",
+            "Added a 404 for a missing row instead of letting `dict(None)` crash."
+          ],
+          "diff": "--- a/app/routers/tasks.py\n+++ b/app/routers/tasks.py\n@@ -1,4 +1,4 @@\n-from fastapi import APIRouter\n+from fastapi import APIRouter, HTTPException\n from app.database import get_connection\n from app.models import Task, TaskCreate\n \n@@ -33,6 +33,8 @@\n     conn = get_connection()\n     row = conn.execute(\"SELECT * FROM tasks WHERE id = ?\", (task_id,)).fetchone()\n     conn.close()\n+    if row is None:\n+        raise HTTPException(status_code=404, detail=\"Not found\")\n     return dict(row)\n \n \n@@ -42,8 +44,8 @@\n     # `owner` comes straight from the query string, so this is a classic\n     # SQL-injection entry point (e.g. owner=' OR '1'='1).\n     conn = get_connection()\n-    query = f\"SELECT * FROM tasks WHERE owner = '{owner}'\"\n-    rows = conn.execute(query).fetchall()\n+    query = \"SELECT * FROM tasks WHERE owner = ?\"\n+    rows = conn.execute(query, (owner,)).fetchall()\n     conn.close()\n     return [dict(r) for r in rows]\n \n"
+        },
+        {
+          "file": "app/routers/users.py",
+          "fixes": [
+            "Added a 404 for a missing row instead of letting `dict(None)` crash."
+          ],
+          "diff": "--- a/app/routers/users.py\n+++ b/app/routers/users.py\n@@ -1,4 +1,4 @@\n-from fastapi import APIRouter\n+from fastapi import APIRouter, HTTPException\n from app.database import get_connection\n from app.models import User, UserCreate\n \n@@ -30,6 +30,8 @@\n     conn = get_connection()\n     row = conn.execute(\"SELECT * FROM users WHERE id = ?\", (user_id,)).fetchone()\n     conn.close()\n+    if row is None:\n+        raise HTTPException(status_code=404, detail=\"Not found\")\n     return dict(row)\n \n @router.put(\"/{user_id}/role\")\n"
+        },
+        {
+          "file": "requirements.txt",
+          "fixes": [
+            "Bumped pyyaml to 6.0.1"
+          ],
+          "diff": "--- a/requirements.txt\n+++ b/requirements.txt\n@@ -1,4 +1,4 @@\n fastapi==0.68.0\n uvicorn==0.15.0\n pydantic==1.8.2\n-PyYAML==5.3\n+PyYAML==6.0.1\n"
+        }
+      ],
+      "files_changed": 3,
+      "test_run": null,
+      "git_branch": null,
+      "_elapsed_seconds": 0.117
+    },
+    "modernization": {
+      "agent": "modernization",
+      "findings": [
+        {
+          "type": "dependency-pinning",
+          "file": "requirements.txt",
+          "function": null,
+          "lines": null,
+          "suggestion": "All 4 dependencies are pinned with exact `==` versions and no lock file -- security patches require a manual bump. Consider a lock file (pip-tools / poetry) with compatible-release ranges."
+        }
+      ],
+      "type_hint_coverage_pct": 58.3,
+      "functions_considered": 12,
+      "unparseable_files": [],
+      "summary": "1 modernization opportunity found across 12 functions (58.3% type-hinted).",
+      "_elapsed_seconds": 0.13
+    },
+    "testing": {
+      "agent": "testing",
+      "coverage_kind": "http_endpoint",
+      "total_endpoints": 10,
+      "covered_endpoints": 10,
+      "uncovered_endpoints": [],
+      "coverage_pct": 100.0,
+      "stub_name_to_endpoint": {},
+      "function_coverage": {
+        "total_functions": 12,
+        "referenced_functions": 0,
+        "pct": 0.0
+      },
+      "test_files_found": 3,
+      "generated_test_file": "tests/test_devpilot_generated.py",
+      "generated_test_source": null,
+      "headline_coverage_pct": 100.0,
+      "headline_label": "endpoint test coverage",
+      "_elapsed_seconds": 0.287
+    }
+  },
+  "confirmed_findings": [],
+  "generated_test_run": {
+    "ran": false,
+    "reason": "no uncovered endpoints"
+  },
+  "business_value": {
+    "total_hours_saved": 4.9,
+    "breakdown": [
+      "2.8h onboarding (7 undocumented modules + setup guide)",
+      "1.0h code review (1 high, 2 medium findings)",
+      "1.0h release audit",
+      "0.1h modernization triage (1 item(s))"
+    ],
+    "breakdown_summary": "2.8h onboarding (7 undocumented modules + setup guide); 1.0h code review (1 high, 2 medium findings); 1.0h release audit; 0.1h modernization triage (1 item(s))",
+    "caveat": "Illustrative estimate based on typical manual review/read/write times, not a measured or audited metric."
+  },
+  "audience_views": {
+    "new_developer": {
+      "label": "New Developer",
+      "headline": "7 modules mapped, 6 starter tasks ready",
+      "setup_steps": [
+        "pip install -r requirements.txt",
+        "or: docker build -t app . && docker run -p 8000:8000 app",
+        "Entry point detected: app/main.py",
+        "Run the test suite first to confirm a clean baseline before changing anything."
+      ],
+      "architecture_map": [
+        {
+          "file": "tests/test_devpilot_generated.py",
+          "functions": 8,
+          "classes": 0,
+          "documented": false,
+          "loc": 71
+        },
+        {
+          "file": "app/routers/tasks.py",
+          "functions": 5,
+          "classes": 0,
+          "documented": false,
+          "loc": 57
+        },
+        {
+          "file": "app/routers/users.py",
+          "functions": 4,
+          "classes": 0,
+          "documented": false,
+          "loc": 41
+        },
+        {
+          "file": "app/database.py",
+          "functions": 2,
+          "classes": 0,
+          "documented": false,
+          "loc": 27
+        },
+        {
+          "file": "app/models.py",
+          "functions": 0,
+          "classes": 4,
+          "documented": false,
+          "loc": 21
+        },
+        {
+          "file": "tests/test_tasks.py",
+          "functions": 2,
+          "classes": 0,
+          "documented": false,
+          "loc": 16
+        },
+        {
+          "file": "app/main.py",
+          "functions": 1,
+          "classes": 0,
+          "documented": false,
+          "loc": 15
+        }
+      ],
+      "starter_tasks": [
+        "Add a module docstring to `app/database.py` explaining its responsibility.",
+        "Add a module docstring to `app/main.py` explaining its responsibility.",
+        "Add a module docstring to `app/models.py` explaining its responsibility.",
+        "Add a module docstring to `app/routers/tasks.py` explaining its responsibility.",
+        "Add a module docstring to `app/routers/users.py` explaining its responsibility.",
+        "Add a module docstring to `tests/test_devpilot_generated.py` explaining its responsibility."
+      ],
+      "ask": "Where should a new engineer start?"
+    },
+    "reviewer": {
+      "label": "Code Reviewer",
+      "headline": "3 finding(s): 1 high, 2 medium, 0 low. Blocking issues found -- recommend requesting changes before merge.",
+      "findings": [
+        {
+          "rule": "sql-injection",
+          "severity": "high",
+          "file": "app/routers/tasks.py",
+          "line": 45,
+          "message": "Query text is built with string formatting instead of parameter binding -- classic SQL-injection entry point.",
+          "confirmed": false
+        },
+        {
+          "rule": "unchecked-lookup",
+          "severity": "medium",
+          "file": "app/routers/tasks.py",
+          "function": "get_task",
+          "message": "`get_task` fetches a single row and returns it without checking for a missing/None result -- a bad id will raise a 500 instead of a 404.",
+          "confirmed": false
+        },
+        {
+          "rule": "unchecked-lookup",
+          "severity": "medium",
+          "file": "app/routers/users.py",
+          "function": "get_user",
+          "message": "`get_user` fetches a single row and returns it without checking for a missing/None result -- a bad id will raise a 500 instead of a 404.",
+          "confirmed": false
+        }
+      ],
+      "confirmed_findings": [],
+      "pr_diff_reviewed": {
+        "file": "pr-142-search-by-owner.diff",
+        "lines_added": 9,
+        "risky_lines_added": 1
+      },
+      "ask": "What should I fix first?"
+    },
+    "tester": {
+      "label": "Tester / QA",
+      "headline": "100.0% endpoint test coverage",
+      "uncovered_endpoints": [],
+      "function_coverage": {
+        "total_functions": 12,
+        "referenced_functions": 0,
+        "pct": 0.0
+      },
+      "generated_test_file": "tests/test_devpilot_generated.py",
+      "test_run": {
+        "ran": false,
+        "reason": "no uncovered endpoints"
+      },
+      "ask": "How much time did this run save?"
+    },
+    "release_manager": {
+      "label": "Release Manager",
+      "headline": "Recommendation: NO-GO",
+      "dependency_flags": [
+        {
+          "package": "pyyaml",
+          "pinned_version": "5.3",
+          "note": "Versions before 5.4 default `yaml.load()` to the unsafe Loader, allowing arbitrary code execution on untrusted input (fixed by requiring an explicit Loader)."
+        }
+      ],
+      "deployment_checklist": [
+        {
+          "item": "Dockerfile present for reproducible deploys",
+          "status": "pass"
+        },
+        {
+          "item": "Health check endpoint available",
+          "status": "pass"
+        },
+        {
+          "item": "No unresolved high-severity code-review findings",
+          "status": "check with code_review agent output"
+        },
+        {
+          "item": "Dependency advisories reviewed",
+          "status": "attention"
+        },
+        {
+          "item": "Test coverage acceptable for changed endpoints",
+          "status": "check with testing agent output"
+        }
+      ],
+      "release_notes": {
+        "internal": [
+          "New endpoint: GET /tasks/search/by-owner (filter tasks by owner).",
+          "Note for reviewers: this endpoint is flagged by the code-review subagent for a SQL-injection risk -- do not ship until parameterized."
+        ],
+        "customer_facing": [
+          "You can now search your tasks by owner."
+        ]
+      },
+      "business_value": {
+        "total_hours_saved": 4.9,
+        "breakdown": [
+          "2.8h onboarding (7 undocumented modules + setup guide)",
+          "1.0h code review (1 high, 2 medium findings)",
+          "1.0h release audit",
+          "0.1h modernization triage (1 item(s))"
+        ],
+        "breakdown_summary": "2.8h onboarding (7 undocumented modules + setup guide); 1.0h code review (1 high, 2 medium findings); 1.0h release audit; 0.1h modernization triage (1 item(s))",
+        "caveat": "Illustrative estimate based on typical manual review/read/write times, not a measured or audited metric."
+      },
+      "ask": "Is it safe to release?"
+    }
+  },
+  "suggested_qa": [
+    {
+      "question": "What should I fix first?",
+      "answer": "Start with app/routers/tasks.py: Query text is built with string formatting instead of parameter binding -- classic SQL-injection entry point..",
+      "source": "template"
+    },
+    {
+      "question": "Is it safe to release?",
+      "answer": "Recommendation: NO-GO. Reason: Versions before 5.4 default `yaml.load()` to the unsafe Loader, allowing arbitrary code execution on untrusted input (fixed by requiring an explicit Loader).",
+      "source": "template"
+    },
+    {
+      "question": "Where should a new engineer start?",
+      "answer": "Start here: Add a module docstring to `app/database.py` explaining its responsibility.",
+      "source": "template"
+    },
+    {
+      "question": "How much time did this run save?",
+      "answer": "Roughly 4.9 hours of manual effort saved on this run (2.8h onboarding (7 undocumented modules + setup guide); 1.0h code review (1 high, 2 medium findings); 1.0h release audit; 0.1h modernization triage (1 item(s))).",
+      "source": "template"
+    }
+  ],
+  "health": {
+    "score": 54,
+    "label": "Critical",
+    "color": "FF6F91",
+    "deductions": [
+      {
+        "reason": "Code review findings",
+        "points": 22.0
+      },
+      {
+        "reason": "Release readiness",
+        "points": 20.0
+      },
+      {
+        "reason": "Documentation gaps",
+        "points": 3.5
+      },
+      {
+        "reason": "Modernization opportunities",
+        "points": 1.0
+      }
+    ]
+  },
+  "executive_summary": {
+    "summary": "TaskFlow-API scores 54/100 (Critical). The most urgent issue is in app/routers/tasks.py: Query text is built with string formatting instead of parameter binding -- classic SQL-injection entry point. Release recommendation: NO-GO. Versions before 5.4 default `yaml.load()` to the unsafe Loader, allowing arbitrary code execution on untrusted input (fixed by requiring an explicit Loader). This run is estimated to have saved about 4.9 hours of manual review, testing, and triage work.",
+    "source": "template"
+  },
+  "blast_radius": [
+    {
+      "file": "app/routers/tasks.py",
+      "function": null,
+      "rule": "sql-injection",
+      "severity": "high",
+      "message": "Query text is built with string formatting instead of parameter binding -- classic SQL-injection entry point.",
+      "confirmed": false,
+      "dependents": [
+        "app/main.py"
+      ],
+      "dependent_count": 1
+    },
+    {
+      "file": "app/routers/tasks.py",
+      "function": "get_task",
+      "rule": "unchecked-lookup",
+      "severity": "medium",
+      "message": "`get_task` fetches a single row and returns it without checking for a missing/None result -- a bad id will raise a 500 instead of a 404.",
+      "confirmed": false,
+      "dependents": [
+        "app/main.py"
+      ],
+      "dependent_count": 1
+    },
+    {
+      "file": "app/routers/users.py",
+      "function": "get_user",
+      "rule": "unchecked-lookup",
+      "severity": "medium",
+      "message": "`get_user` fetches a single row and returns it without checking for a missing/None result -- a bad id will raise a 500 instead of a 404.",
+      "confirmed": false,
+      "dependents": [
+        "app/main.py"
+      ],
+      "dependent_count": 1
+    }
+  ],
+  "dependency_map": {
+    "nodes": [
+      "app/database.py",
+      "app/main.py",
+      "app/models.py",
+      "app/__init__.py",
+      "app/routers/tasks.py",
+      "app/routers/users.py",
+      "app/routers/__init__.py"
+    ],
+    "edges": [
+      {
+        "from": "app/main.py",
+        "to": "app/database.py"
+      },
+      {
+        "from": "app/routers/tasks.py",
+        "to": "app/database.py"
+      },
+      {
+        "from": "app/routers/users.py",
+        "to": "app/database.py"
+      },
+      {
+        "from": "app/routers/tasks.py",
+        "to": "app/models.py"
+      },
+      {
+        "from": "app/routers/users.py",
+        "to": "app/models.py"
+      },
+      {
+        "from": "app/main.py",
+        "to": "app/routers/tasks.py"
+      },
+      {
+        "from": "app/main.py",
+        "to": "app/routers/users.py"
+      }
+    ],
+    "truncated": false,
+    "total_files": 7
+  },
+  "history": {
+    "runs_recorded": 3,
+    "trend": "unchanged",
+    "score_delta": 0,
+    "recurring_rules": [
+      {
+        "rule": "sql-injection",
+        "seen_in_runs": 3
+      },
+      {
+        "rule": "unchecked-lookup",
+        "seen_in_runs": 3
+      }
+    ],
+    "series": [
+      {
+        "t": 1790511375.119297,
+        "score": 36
+      },
+      {
+        "t": 1790511381.283583,
+        "score": 54
+      },
+      {
+        "t": 1790511603.8088193,
+        "score": 54
+      }
+    ]
+  },
+  "premortem": [
+    {
+      "file": "app/routers/tasks.py",
+      "function": null,
+      "severity": "high",
+      "confirmed": false,
+      "title": "app/routers/tasks.py",
+      "timeline": [
+        "1. A request arrives with a crafted value instead of ordinary input.",
+        "2. The query executes with that value spliced directly into SQL instead of bound as a parameter.",
+        "3. The database returns rows the caller was never meant to see -- or a second statement executes outright.",
+        "4. By the time anyone notices, the data has already been read, altered, or exfiltrated."
+      ],
+      "impact": "Blast radius: 1 other file(s) depend on app/routers/tasks.py, so the failure doesn't stay contained.",
+      "prevention": "Query text is built with string formatting instead of parameter binding -- classic SQL-injection entry point. Fixing it now (see Auto-Fix) is the prevention strategy -- there's no monitoring workaround for a bug that's already in the code path.",
+      "narrative": "A request arrives with a crafted value instead of ordinary input. The query executes with that value spliced directly into SQL instead of bound as a parameter. The database returns rows the caller was never meant to see -- or a second statement executes outright. By the time anyone notices, the data has already been read, altered, or exfiltrated.",
+      "source": "template"
+    },
+    {
+      "file": "app/routers/tasks.py",
+      "function": "get_task",
+      "severity": "medium",
+      "confirmed": false,
+      "title": "app/routers/tasks.py :: get_task",
+      "timeline": [
+        "1. A caller requests a record with an id that doesn't exist (typo, stale link, deleted row).",
+        "2. The lookup returns nothing, but the code doesn't check for that.",
+        "3. The next line runs against a missing result and raises an unhandled exception.",
+        "4. The caller gets a raw server error instead of a clean 404 -- and if this endpoint is popular, it shows up as a spike in noisy error-rate alerts."
+      ],
+      "impact": "Blast radius: 1 other file(s) depend on app/routers/tasks.py, so the failure doesn't stay contained.",
+      "prevention": "`get_task` fetches a single row and returns it without checking for a missing/None result -- a bad id will raise a 500 instead of a 404. Fixing it now (see Auto-Fix) is the prevention strategy -- there's no monitoring workaround for a bug that's already in the code path.",
+      "narrative": "A caller requests a record with an id that doesn't exist (typo, stale link, deleted row). The lookup returns nothing, but the code doesn't check for that. The next line runs against a missing result and raises an unhandled exception. The caller gets a raw server error instead of a clean 404 -- and if this endpoint is popular, it shows up as a spike in noisy error-rate alerts.",
+      "source": "template"
+    },
+    {
+      "file": "app/routers/users.py",
+      "function": "get_user",
+      "severity": "medium",
+      "confirmed": false,
+      "title": "app/routers/users.py :: get_user",
+      "timeline": [
+        "1. A caller requests a record with an id that doesn't exist (typo, stale link, deleted row).",
+        "2. The lookup returns nothing, but the code doesn't check for that.",
+        "3. The next line runs against a missing result and raises an unhandled exception.",
+        "4. The caller gets a raw server error instead of a clean 404 -- and if this endpoint is popular, it shows up as a spike in noisy error-rate alerts."
+      ],
+      "impact": "Blast radius: 1 other file(s) depend on app/routers/users.py, so the failure doesn't stay contained.",
+      "prevention": "`get_user` fetches a single row and returns it without checking for a missing/None result -- a bad id will raise a 500 instead of a 404. Fixing it now (see Auto-Fix) is the prevention strategy -- there's no monitoring workaround for a bug that's already in the code path.",
+      "narrative": "A caller requests a record with an id that doesn't exist (typo, stale link, deleted row). The lookup returns nothing, but the code doesn't check for that. The next line runs against a missing result and raises an unhandled exception. The caller gets a raw server error instead of a clean 404 -- and if this endpoint is popular, it shows up as a spike in noisy error-rate alerts.",
+      "source": "template"
+    }
+  ],
+  "executive_intelligence": {
+    "health_score": 54,
+    "health_label": "Critical",
+    "release_recommendation": "NO-GO",
+    "hours_saved": 4.9,
+    "risk_portfolio": [
+      {
+        "file": "app/routers/tasks.py",
+        "function": null,
+        "severity": "high",
+        "confirmed": false,
+        "dependent_count": 1,
+        "message": "Query text is built with string formatting instead of parameter binding -- classic SQL-injection entry point."
+      },
+      {
+        "file": "app/routers/tasks.py",
+        "function": "get_task",
+        "severity": "medium",
+        "confirmed": false,
+        "dependent_count": 1,
+        "message": "`get_task` fetches a single row and returns it without checking for a missing/None result -- a bad id will raise a 500 instead of a 404."
+      },
+      {
+        "file": "app/routers/users.py",
+        "function": "get_user",
+        "severity": "medium",
+        "confirmed": false,
+        "dependent_count": 1,
+        "message": "`get_user` fetches a single row and returns it without checking for a missing/None result -- a bad id will raise a 500 instead of a 404."
+      }
+    ],
+    "trend": "unchanged",
+    "score_delta": 0,
+    "runs_recorded": 3,
+    "caveat": "Metrics like MTTR, MTBF, and cost-of-downtime need real production incident telemetry, which this static-analysis run doesn't have. Everything above comes directly from this run's own findings -- nothing here is a measured reliability statistic."
+  }
+}

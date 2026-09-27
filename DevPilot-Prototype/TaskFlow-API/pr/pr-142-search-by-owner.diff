@@ -1,0 +1,20 @@
+diff --git a/app/routers/tasks.py b/app/routers/tasks.py
+index 1111111..2222222 100644
+--- a/app/routers/tasks.py
++++ b/app/routers/tasks.py
+@@ -20,6 +20,16 @@ def list_tasks():
+     return [dict(r) for r in rows]
+ 
+ 
++@router.get("/search/by-owner")
++def search_by_owner(owner: str):
++    conn = get_connection()
++    query = f"SELECT * FROM tasks WHERE owner = '{owner}'"
++    rows = conn.execute(query).fetchall()
++    conn.close()
++    return [dict(r) for r in rows]
++
++
+ @router.get("/{task_id}")
+ def get_task(task_id: int):
+     conn = get_connection()

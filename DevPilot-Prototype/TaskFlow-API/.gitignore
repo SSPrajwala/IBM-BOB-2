@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+taskflow.db
+.pytest_cache/
