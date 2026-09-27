@@ -1,0 +1,38 @@
+[
+  {
+    "timestamp": 1790511934.6401336,
+    "project": "devpilot_web_clone_5qpfwiwf",
+    "score": 62,
+    "label": "Needs Attention",
+    "high": 0,
+    "medium": 1,
+    "rules": [
+      "broad-except-pass",
+      "permissive-cors"
+    ]
+  },
+  {
+    "timestamp": 1790515097.8970656,
+    "project": "devpilot_web_clone_5bhpye8b",
+    "score": 62,
+    "label": "Needs Attention",
+    "high": 0,
+    "medium": 1,
+    "rules": [
+      "broad-except-pass",
+      "permissive-cors"
+    ]
+  },
+  {
+    "timestamp": 1790515177.4674911,
+    "project": "devpilot_web_clone_eke0a6xh",
+    "score": 62,
+    "label": "Needs Attention",
+    "high": 0,
+    "medium": 1,
+    "rules": [
+      "broad-except-pass",
+      "permissive-cors"
+    ]
+  }
+]

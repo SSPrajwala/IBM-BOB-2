@@ -1,0 +1,1527 @@
+{
+  "project": "devpilot_clone_flhlmqkv",
+  "generated_by": "DevPilot (IBM Bob 2.0 prototype)",
+  "agents_run_in_parallel": [
+    "onboarding",
+    "code_review",
+    "testing",
+    "release_readiness",
+    "modernization",
+    "auto_fix"
+  ],
+  "wall_clock_seconds": 0.155,
+  "sequential_equivalent_seconds": 0.672,
+  "results": {
+    "release_readiness": {
+      "agent": "release_readiness",
+      "dependency_flags": [],
+      "deployment_checklist": [
+        {
+          "item": "Dockerfile present for reproducible deploys",
+          "status": "pass"
+        },
+        {
+          "item": "Health check endpoint available",
+          "status": "fail"
+        },
+        {
+          "item": "No unresolved high-severity code-review findings",
+          "status": "check with code_review agent output"
+        },
+        {
+          "item": "Dependency advisories reviewed",
+          "status": "pass"
+        },
+        {
+          "item": "Test coverage acceptable for changed endpoints",
+          "status": "check with testing agent output"
+        }
+      ],
+      "release_notes": {
+        "internal": [
+          "New endpoint: GET /tasks/search/by-owner (filter tasks by owner).",
+          "Note for reviewers: this endpoint is flagged by the code-review subagent for a SQL-injection risk -- do not ship until parameterized."
+        ],
+        "customer_facing": [
+          "No customer-facing changes in this release."
+        ]
+      },
+      "recommendation": "NO-GO",
+      "_elapsed_seconds": 0.006
+    },
+    "auto_fix": {
+      "agent": "auto_fix",
+      "applied": false,
+      "candidate_fixes": [],
+      "files_changed": 0,
+      "test_run": null,
+      "git_branch": null,
+      "_elapsed_seconds": 0.117
+    },
+    "onboarding": {
+      "agent": "onboarding",
+      "modules_scanned": 24,
+      "total_loc": 1402,
+      "undocumented_modules": [
+        "microblog.py",
+        "tests.py",
+        "config.py",
+        "app/tasks.py",
+        "app/search.py",
+        "app/__init__.py",
+        "app/cli.py",
+        "app/translate.py",
+        "app/email.py",
+        "app/models.py",
+        "app/errors/__init__.py",
+        "app/errors/handlers.py",
+        "app/main/routes.py",
+        "app/main/__init__.py",
+        "app/main/forms.py",
+        "app/api/__init__.py",
+        "app/api/tokens.py",
+        "app/api/users.py",
+        "app/api/auth.py",
+        "app/api/errors.py",
+        "app/auth/routes.py",
+        "app/auth/__init__.py",
+        "app/auth/forms.py",
+        "app/auth/email.py"
+      ],
+      "has_readme": true,
+      "has_tests": true,
+      "has_dockerfile": true,
+      "architecture_map": [
+        {
+          "file": "app/models.py",
+          "functions": 34,
+          "classes": 7,
+          "documented": false,
+          "loc": 356
+        },
+        {
+          "file": "app/main/routes.py",
+          "functions": 14,
+          "classes": 0,
+          "documented": false,
+          "loc": 241
+        },
+        {
+          "file": "tests.py",
+          "functions": 6,
+          "classes": 2,
+          "documented": false,
+          "loc": 106
+        },
+        {
+          "file": "app/__init__.py",
+          "functions": 2,
+          "classes": 0,
+          "documented": false,
+          "loc": 99
+        },
+        {
+          "file": "app/auth/routes.py",
+          "functions": 5,
+          "classes": 0,
+          "documented": false,
+          "loc": 85
+        },
+        {
+          "file": "app/api/users.py",
+          "functions": 6,
+          "classes": 0,
+          "documented": false,
+          "loc": 81
+        },
+        {
+          "file": "app/tasks.py",
+          "functions": 2,
+          "classes": 0,
+          "documented": false,
+          "loc": 56
+        },
+        {
+          "file": "app/main/forms.py",
+          "functions": 3,
+          "classes": 5,
+          "documented": false,
+          "loc": 53
+        },
+        {
+          "file": "app/auth/forms.py",
+          "functions": 2,
+          "classes": 4,
+          "documented": false,
+          "loc": 49
+        },
+        {
+          "file": "app/cli.py",
+          "functions": 4,
+          "classes": 0,
+          "documented": false,
+          "loc": 40
+        },
+        {
+          "file": "app/api/auth.py",
+          "functions": 4,
+          "classes": 0,
+          "documented": false,
+          "loc": 30
+        },
+        {
+          "file": "app/search.py",
+          "functions": 3,
+          "classes": 0,
+          "documented": false,
+          "loc": 28
+        },
+        {
+          "file": "config.py",
+          "functions": 0,
+          "classes": 1,
+          "documented": false,
+          "loc": 25
+        },
+        {
+          "file": "app/email.py",
+          "functions": 2,
+          "classes": 0,
+          "documented": false,
+          "loc": 24
+        },
+        {
+          "file": "app/errors/handlers.py",
+          "functions": 3,
+          "classes": 0,
+          "documented": false,
+          "loc": 24
+        },
+        {
+          "file": "app/translate.py",
+          "functions": 1,
+          "classes": 0,
+          "documented": false,
+          "loc": 21
+        },
+        {
+          "file": "app/api/tokens.py",
+          "functions": 2,
+          "classes": 0,
+          "documented": false,
+          "loc": 19
+        },
+        {
+          "file": "app/api/errors.py",
+          "functions": 3,
+          "classes": 0,
+          "documented": false,
+          "loc": 19
+        },
+        {
+          "file": "app/auth/email.py",
+          "functions": 1,
+          "classes": 0,
+          "documented": false,
+          "loc": 14
+        },
+        {
+          "file": "microblog.py",
+          "functions": 1,
+          "classes": 0,
+          "documented": false,
+          "loc": 12
+        },
+        {
+          "file": "app/errors/__init__.py",
+          "functions": 0,
+          "classes": 0,
+          "documented": false,
+          "loc": 5
+        },
+        {
+          "file": "app/main/__init__.py",
+          "functions": 0,
+          "classes": 0,
+          "documented": false,
+          "loc": 5
+        },
+        {
+          "file": "app/api/__init__.py",
+          "functions": 0,
+          "classes": 0,
+          "documented": false,
+          "loc": 5
+        },
+        {
+          "file": "app/auth/__init__.py",
+          "functions": 0,
+          "classes": 0,
+          "documented": false,
+          "loc": 5
+        }
+      ],
+      "setup_steps": [
+        "pip install -r requirements.txt",
+        "or: docker build -t app . && docker run -p 8000:8000 app",
+        "Entry point detected: microblog.py",
+        "Run the test suite first to confirm a clean baseline before changing anything."
+      ],
+      "starter_tasks": [
+        "Add a module docstring to `app/__init__.py` explaining its responsibility.",
+        "Add a module docstring to `app/api/__init__.py` explaining its responsibility.",
+        "Add a module docstring to `app/api/auth.py` explaining its responsibility.",
+        "Add a module docstring to `app/api/errors.py` explaining its responsibility.",
+        "Add a module docstring to `app/api/tokens.py` explaining its responsibility.",
+        "Add a module docstring to `app/api/users.py` explaining its responsibility."
+      ],
+      "_elapsed_seconds": 0.132
+    },
+    "code_review": {
+      "agent": "code_review",
+      "findings": [
+        {
+          "rule": "broad-except-pass",
+          "severity": "low",
+          "file": "app/tasks.py",
+          "line": 52,
+          "message": "Catching bare `Exception` hides the real failure mode from callers and logs -- narrow it or re-raise.",
+          "confirmed": false
+        },
+        {
+          "rule": "long-parameter-list",
+          "severity": "low",
+          "file": "app/email.py",
+          "function": "send_email",
+          "message": "`send_email` takes 7 parameters -- consider a config object/dataclass; easy to pass args in the wrong order.",
+          "confirmed": false
+        },
+        {
+          "rule": "broad-except-pass",
+          "severity": "low",
+          "file": "app/models.py",
+          "line": 191,
+          "message": "Catching bare `Exception` hides the real failure mode from callers and logs -- narrow it or re-raise.",
+          "confirmed": false
+        }
+      ],
+      "counts": {
+        "high": 0,
+        "medium": 0,
+        "low": 3
+      },
+      "rules_checked": 15,
+      "pr_diff_reviewed": null,
+      "summary": "3 finding(s): 0 high, 0 medium, 3 low. No blocking issues; safe to approve with minor follow-ups.",
+      "_elapsed_seconds": 0.132
+    },
+    "modernization": {
+      "agent": "modernization",
+      "findings": [
+        {
+          "type": "oversized-function",
+          "file": "app/__init__.py",
+          "function": "create_app",
+          "lines": 65,
+          "suggestion": "`create_app` is 65 lines -- consider splitting it into smaller, independently testable functions."
+        },
+        {
+          "type": "dependency-pinning",
+          "file": "requirements.txt",
+          "function": null,
+          "lines": null,
+          "suggestion": "All 54 dependencies are pinned with exact `==` versions and no lock file -- security patches require a manual bump. Consider a lock file (pip-tools / poetry) with compatible-release ranges."
+        }
+      ],
+      "type_hint_coverage_pct": 0.0,
+      "functions_considered": 54,
+      "unparseable_files": [],
+      "summary": "2 modernization opportunities found across 54 functions (0.0% type-hinted).",
+      "_elapsed_seconds": 0.131
+    },
+    "testing": {
+      "agent": "testing",
+      "coverage_kind": "http_endpoint",
+      "total_endpoints": 35,
+      "covered_endpoints": 0,
+      "uncovered_endpoints": [
+        {
+          "method": "get",
+          "path": "/",
+          "source_file": "app/main/routes.py",
+          "function": "index"
+        },
+        {
+          "method": "post",
+          "path": "/",
+          "source_file": "app/main/routes.py",
+          "function": "index"
+        },
+        {
+          "method": "get",
+          "path": "/index",
+          "source_file": "app/main/routes.py",
+          "function": "index"
+        },
+        {
+          "method": "post",
+          "path": "/index",
+          "source_file": "app/main/routes.py",
+          "function": "index"
+        },
+        {
+          "method": "get",
+          "path": "/explore",
+          "source_file": "app/main/routes.py",
+          "function": "explore"
+        },
+        {
+          "method": "get",
+          "path": "/user/<username>",
+          "source_file": "app/main/routes.py",
+          "function": "user"
+        },
+        {
+          "method": "get",
+          "path": "/user/<username>/popup",
+          "source_file": "app/main/routes.py",
+          "function": "user_popup"
+        },
+        {
+          "method": "get",
+          "path": "/edit_profile",
+          "source_file": "app/main/routes.py",
+          "function": "edit_profile"
+        },
+        {
+          "method": "post",
+          "path": "/edit_profile",
+          "source_file": "app/main/routes.py",
+          "function": "edit_profile"
+        },
+        {
+          "method": "post",
+          "path": "/follow/<username>",
+          "source_file": "app/main/routes.py",
+          "function": "follow"
+        },
+        {
+          "method": "post",
+          "path": "/unfollow/<username>",
+          "source_file": "app/main/routes.py",
+          "function": "unfollow"
+        },
+        {
+          "method": "post",
+          "path": "/translate",
+          "source_file": "app/main/routes.py",
+          "function": "translate_text"
+        },
+        {
+          "method": "get",
+          "path": "/search",
+          "source_file": "app/main/routes.py",
+          "function": "search"
+        },
+        {
+          "method": "get",
+          "path": "/send_message/<recipient>",
+          "source_file": "app/main/routes.py",
+          "function": "send_message"
+        },
+        {
+          "method": "post",
+          "path": "/send_message/<recipient>",
+          "source_file": "app/main/routes.py",
+          "function": "send_message"
+        },
+        {
+          "method": "get",
+          "path": "/messages",
+          "source_file": "app/main/routes.py",
+          "function": "messages"
+        },
+        {
+          "method": "get",
+          "path": "/export_posts",
+          "source_file": "app/main/routes.py",
+          "function": "export_posts"
+        },
+        {
+          "method": "get",
+          "path": "/notifications",
+          "source_file": "app/main/routes.py",
+          "function": "notifications"
+        },
+        {
+          "method": "post",
+          "path": "/tokens",
+          "source_file": "app/api/tokens.py",
+          "function": "get_token"
+        },
+        {
+          "method": "delete",
+          "path": "/tokens",
+          "source_file": "app/api/tokens.py",
+          "function": "revoke_token"
+        },
+        {
+          "method": "get",
+          "path": "/users/<int:id>",
+          "source_file": "app/api/users.py",
+          "function": "get_user"
+        },
+        {
+          "method": "get",
+          "path": "/users",
+          "source_file": "app/api/users.py",
+          "function": "get_users"
+        },
+        {
+          "method": "get",
+          "path": "/users/<int:id>/followers",
+          "source_file": "app/api/users.py",
+          "function": "get_followers"
+        },
+        {
+          "method": "get",
+          "path": "/users/<int:id>/following",
+          "source_file": "app/api/users.py",
+          "function": "get_following"
+        },
+        {
+          "method": "post",
+          "path": "/users",
+          "source_file": "app/api/users.py",
+          "function": "create_user"
+        },
+        {
+          "method": "put",
+          "path": "/users/<int:id>",
+          "source_file": "app/api/users.py",
+          "function": "update_user"
+        },
+        {
+          "method": "get",
+          "path": "/login",
+          "source_file": "app/auth/routes.py",
+          "function": "login"
+        },
+        {
+          "method": "post",
+          "path": "/login",
+          "source_file": "app/auth/routes.py",
+          "function": "login"
+        },
+        {
+          "method": "get",
+          "path": "/logout",
+          "source_file": "app/auth/routes.py",
+          "function": "logout"
+        },
+        {
+          "method": "get",
+          "path": "/register",
+          "source_file": "app/auth/routes.py",
+          "function": "register"
+        },
+        {
+          "method": "post",
+          "path": "/register",
+          "source_file": "app/auth/routes.py",
+          "function": "register"
+        },
+        {
+          "method": "get",
+          "path": "/reset_password_request",
+          "source_file": "app/auth/routes.py",
+          "function": "reset_password_request"
+        },
+        {
+          "method": "post",
+          "path": "/reset_password_request",
+          "source_file": "app/auth/routes.py",
+          "function": "reset_password_request"
+        },
+        {
+          "method": "get",
+          "path": "/reset_password/<token>",
+          "source_file": "app/auth/routes.py",
+          "function": "reset_password"
+        },
+        {
+          "method": "post",
+          "path": "/reset_password/<token>",
+          "source_file": "app/auth/routes.py",
+          "function": "reset_password"
+        }
+      ],
+      "coverage_pct": 0.0,
+      "stub_name_to_endpoint": {
+        "test_get": {
+          "method": "get",
+          "path": "/",
+          "source_file": "app/main/routes.py",
+          "function": "index"
+        },
+        "test_post": {
+          "method": "post",
+          "path": "/",
+          "source_file": "app/main/routes.py",
+          "function": "index"
+        },
+        "test_get_index": {
+          "method": "get",
+          "path": "/index",
+          "source_file": "app/main/routes.py",
+          "function": "index"
+        },
+        "test_post_index": {
+          "method": "post",
+          "path": "/index",
+          "source_file": "app/main/routes.py",
+          "function": "index"
+        },
+        "test_get_explore": {
+          "method": "get",
+          "path": "/explore",
+          "source_file": "app/main/routes.py",
+          "function": "explore"
+        },
+        "test_get_user_username": {
+          "method": "get",
+          "path": "/user/<username>",
+          "source_file": "app/main/routes.py",
+          "function": "user"
+        },
+        "test_get_user_username_popup": {
+          "method": "get",
+          "path": "/user/<username>/popup",
+          "source_file": "app/main/routes.py",
+          "function": "user_popup"
+        },
+        "test_get_edit_profile": {
+          "method": "get",
+          "path": "/edit_profile",
+          "source_file": "app/main/routes.py",
+          "function": "edit_profile"
+        },
+        "test_post_edit_profile": {
+          "method": "post",
+          "path": "/edit_profile",
+          "source_file": "app/main/routes.py",
+          "function": "edit_profile"
+        },
+        "test_post_follow_username": {
+          "method": "post",
+          "path": "/follow/<username>",
+          "source_file": "app/main/routes.py",
+          "function": "follow"
+        },
+        "test_post_unfollow_username": {
+          "method": "post",
+          "path": "/unfollow/<username>",
+          "source_file": "app/main/routes.py",
+          "function": "unfollow"
+        },
+        "test_post_translate": {
+          "method": "post",
+          "path": "/translate",
+          "source_file": "app/main/routes.py",
+          "function": "translate_text"
+        },
+        "test_get_search": {
+          "method": "get",
+          "path": "/search",
+          "source_file": "app/main/routes.py",
+          "function": "search"
+        },
+        "test_get_send_message_recipient": {
+          "method": "get",
+          "path": "/send_message/<recipient>",
+          "source_file": "app/main/routes.py",
+          "function": "send_message"
+        },
+        "test_post_send_message_recipient": {
+          "method": "post",
+          "path": "/send_message/<recipient>",
+          "source_file": "app/main/routes.py",
+          "function": "send_message"
+        },
+        "test_get_messages": {
+          "method": "get",
+          "path": "/messages",
+          "source_file": "app/main/routes.py",
+          "function": "messages"
+        },
+        "test_get_export_posts": {
+          "method": "get",
+          "path": "/export_posts",
+          "source_file": "app/main/routes.py",
+          "function": "export_posts"
+        },
+        "test_get_notifications": {
+          "method": "get",
+          "path": "/notifications",
+          "source_file": "app/main/routes.py",
+          "function": "notifications"
+        },
+        "test_post_tokens": {
+          "method": "post",
+          "path": "/tokens",
+          "source_file": "app/api/tokens.py",
+          "function": "get_token"
+        },
+        "test_delete_tokens": {
+          "method": "delete",
+          "path": "/tokens",
+          "source_file": "app/api/tokens.py",
+          "function": "revoke_token"
+        },
+        "test_get_users_int_id": {
+          "method": "get",
+          "path": "/users/<int:id>",
+          "source_file": "app/api/users.py",
+          "function": "get_user"
+        },
+        "test_get_users": {
+          "method": "get",
+          "path": "/users",
+          "source_file": "app/api/users.py",
+          "function": "get_users"
+        },
+        "test_get_users_int_id_followers": {
+          "method": "get",
+          "path": "/users/<int:id>/followers",
+          "source_file": "app/api/users.py",
+          "function": "get_followers"
+        },
+        "test_get_users_int_id_following": {
+          "method": "get",
+          "path": "/users/<int:id>/following",
+          "source_file": "app/api/users.py",
+          "function": "get_following"
+        },
+        "test_post_users": {
+          "method": "post",
+          "path": "/users",
+          "source_file": "app/api/users.py",
+          "function": "create_user"
+        },
+        "test_put_users_int_id": {
+          "method": "put",
+          "path": "/users/<int:id>",
+          "source_file": "app/api/users.py",
+          "function": "update_user"
+        },
+        "test_get_login": {
+          "method": "get",
+          "path": "/login",
+          "source_file": "app/auth/routes.py",
+          "function": "login"
+        },
+        "test_post_login": {
+          "method": "post",
+          "path": "/login",
+          "source_file": "app/auth/routes.py",
+          "function": "login"
+        },
+        "test_get_logout": {
+          "method": "get",
+          "path": "/logout",
+          "source_file": "app/auth/routes.py",
+          "function": "logout"
+        },
+        "test_get_register": {
+          "method": "get",
+          "path": "/register",
+          "source_file": "app/auth/routes.py",
+          "function": "register"
+        },
+        "test_post_register": {
+          "method": "post",
+          "path": "/register",
+          "source_file": "app/auth/routes.py",
+          "function": "register"
+        },
+        "test_get_reset_password_request": {
+          "method": "get",
+          "path": "/reset_password_request",
+          "source_file": "app/auth/routes.py",
+          "function": "reset_password_request"
+        },
+        "test_post_reset_password_request": {
+          "method": "post",
+          "path": "/reset_password_request",
+          "source_file": "app/auth/routes.py",
+          "function": "reset_password_request"
+        },
+        "test_get_reset_password_token": {
+          "method": "get",
+          "path": "/reset_password/<token>",
+          "source_file": "app/auth/routes.py",
+          "function": "reset_password"
+        },
+        "test_post_reset_password_token": {
+          "method": "post",
+          "path": "/reset_password/<token>",
+          "source_file": "app/auth/routes.py",
+          "function": "reset_password"
+        }
+      },
+      "function_coverage": {
+        "total_functions": 78,
+        "referenced_functions": 10,
+        "pct": 12.8
+      },
+      "test_files_found": 1,
+      "generated_test_file": "tests/test_devpilot_generated.py",
+      "generated_test_source": "import pytest\n\napp = None\ntry:\n    from app.__init__ import app as app\nexcept Exception:\n    pass\nif app is None:\n    pytest.skip('DevPilot could not automatically locate the app instance -- wire up the import above by hand', allow_module_level=True)\n\ntry:\n    from fastapi.testclient import TestClient\n    client = TestClient(app)\nexcept Exception:\n    client = app.test_client()\n\n\ndef test_get():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.get(\"/\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_post():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.post(\"/\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_get_index():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.get(\"/index\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_post_index():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.post(\"/index\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_get_explore():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.get(\"/explore\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_get_user_username():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.get(\"/user/1\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_get_user_username_popup():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.get(\"/user/1/popup\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_get_edit_profile():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.get(\"/edit_profile\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_post_edit_profile():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.post(\"/edit_profile\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_post_follow_username():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.post(\"/follow/1\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_post_unfollow_username():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.post(\"/unfollow/1\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_post_translate():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.post(\"/translate\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_get_search():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.get(\"/search\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_get_send_message_recipient():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.get(\"/send_message/1\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_post_send_message_recipient():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.post(\"/send_message/1\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_get_messages():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.get(\"/messages\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_get_export_posts():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.get(\"/export_posts\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_get_notifications():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.get(\"/notifications\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_post_tokens():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.post(\"/tokens\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_delete_tokens():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.delete(\"/tokens\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_get_users_int_id():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.get(\"/users/1\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_get_users():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.get(\"/users\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_get_users_int_id_followers():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.get(\"/users/1/followers\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_get_users_int_id_following():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.get(\"/users/1/following\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_post_users():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.post(\"/users\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_put_users_int_id():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.put(\"/users/1\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_get_login():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.get(\"/login\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_post_login():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.post(\"/login\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_get_logout():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.get(\"/logout\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_get_register():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.get(\"/register\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_post_register():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.post(\"/register\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_get_reset_password_request():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.get(\"/reset_password_request\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_post_reset_password_request():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.post(\"/reset_password_request\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_get_reset_password_token():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.get(\"/reset_password/1\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n\n\ndef test_post_reset_password_token():\n    \"\"\"Auto-generated by DevPilot's testing subagent -- fill in real assertions.\"\"\"\n    resp = client.post(\"/reset_password/1\")\n    assert resp.status_code in (200, 404, 422)  # TODO: narrow this down\n\n",
+      "headline_coverage_pct": 12.8,
+      "headline_label": "functions referenced in tests (no HTTP-client tests detected)",
+      "_elapsed_seconds": 0.154
+    }
+  },
+  "confirmed_findings": [],
+  "generated_test_run": {
+    "ran": true,
+    "failed_tests": [],
+    "raw_tail": "\n1 skipped in 0.01s"
+  },
+  "business_value": {
+    "total_hours_saved": 17.1,
+    "breakdown": [
+      "7.0h onboarding (24 undocumented modules + setup guide)",
+      "8.8h test writing (35 stub tests auto-generated)",
+      "1.0h release audit",
+      "0.3h modernization triage (2 item(s))"
+    ],
+    "breakdown_summary": "7.0h onboarding (24 undocumented modules + setup guide); 8.8h test writing (35 stub tests auto-generated); 1.0h release audit; 0.3h modernization triage (2 item(s))",
+    "caveat": "Illustrative estimate based on typical manual review/read/write times, not a measured or audited metric."
+  },
+  "audience_views": {
+    "new_developer": {
+      "label": "New Developer",
+      "headline": "24 modules mapped, 6 starter tasks ready",
+      "setup_steps": [
+        "pip install -r requirements.txt",
+        "or: docker build -t app . && docker run -p 8000:8000 app",
+        "Entry point detected: microblog.py",
+        "Run the test suite first to confirm a clean baseline before changing anything."
+      ],
+      "architecture_map": [
+        {
+          "file": "app/models.py",
+          "functions": 34,
+          "classes": 7,
+          "documented": false,
+          "loc": 356
+        },
+        {
+          "file": "app/main/routes.py",
+          "functions": 14,
+          "classes": 0,
+          "documented": false,
+          "loc": 241
+        },
+        {
+          "file": "tests.py",
+          "functions": 6,
+          "classes": 2,
+          "documented": false,
+          "loc": 106
+        },
+        {
+          "file": "app/__init__.py",
+          "functions": 2,
+          "classes": 0,
+          "documented": false,
+          "loc": 99
+        },
+        {
+          "file": "app/auth/routes.py",
+          "functions": 5,
+          "classes": 0,
+          "documented": false,
+          "loc": 85
+        },
+        {
+          "file": "app/api/users.py",
+          "functions": 6,
+          "classes": 0,
+          "documented": false,
+          "loc": 81
+        },
+        {
+          "file": "app/tasks.py",
+          "functions": 2,
+          "classes": 0,
+          "documented": false,
+          "loc": 56
+        },
+        {
+          "file": "app/main/forms.py",
+          "functions": 3,
+          "classes": 5,
+          "documented": false,
+          "loc": 53
+        },
+        {
+          "file": "app/auth/forms.py",
+          "functions": 2,
+          "classes": 4,
+          "documented": false,
+          "loc": 49
+        },
+        {
+          "file": "app/cli.py",
+          "functions": 4,
+          "classes": 0,
+          "documented": false,
+          "loc": 40
+        },
+        {
+          "file": "app/api/auth.py",
+          "functions": 4,
+          "classes": 0,
+          "documented": false,
+          "loc": 30
+        },
+        {
+          "file": "app/search.py",
+          "functions": 3,
+          "classes": 0,
+          "documented": false,
+          "loc": 28
+        },
+        {
+          "file": "config.py",
+          "functions": 0,
+          "classes": 1,
+          "documented": false,
+          "loc": 25
+        },
+        {
+          "file": "app/email.py",
+          "functions": 2,
+          "classes": 0,
+          "documented": false,
+          "loc": 24
+        },
+        {
+          "file": "app/errors/handlers.py",
+          "functions": 3,
+          "classes": 0,
+          "documented": false,
+          "loc": 24
+        },
+        {
+          "file": "app/translate.py",
+          "functions": 1,
+          "classes": 0,
+          "documented": false,
+          "loc": 21
+        },
+        {
+          "file": "app/api/tokens.py",
+          "functions": 2,
+          "classes": 0,
+          "documented": false,
+          "loc": 19
+        },
+        {
+          "file": "app/api/errors.py",
+          "functions": 3,
+          "classes": 0,
+          "documented": false,
+          "loc": 19
+        },
+        {
+          "file": "app/auth/email.py",
+          "functions": 1,
+          "classes": 0,
+          "documented": false,
+          "loc": 14
+        },
+        {
+          "file": "microblog.py",
+          "functions": 1,
+          "classes": 0,
+          "documented": false,
+          "loc": 12
+        },
+        {
+          "file": "app/errors/__init__.py",
+          "functions": 0,
+          "classes": 0,
+          "documented": false,
+          "loc": 5
+        },
+        {
+          "file": "app/main/__init__.py",
+          "functions": 0,
+          "classes": 0,
+          "documented": false,
+          "loc": 5
+        },
+        {
+          "file": "app/api/__init__.py",
+          "functions": 0,
+          "classes": 0,
+          "documented": false,
+          "loc": 5
+        },
+        {
+          "file": "app/auth/__init__.py",
+          "functions": 0,
+          "classes": 0,
+          "documented": false,
+          "loc": 5
+        }
+      ],
+      "starter_tasks": [
+        "Add a module docstring to `app/__init__.py` explaining its responsibility.",
+        "Add a module docstring to `app/api/__init__.py` explaining its responsibility.",
+        "Add a module docstring to `app/api/auth.py` explaining its responsibility.",
+        "Add a module docstring to `app/api/errors.py` explaining its responsibility.",
+        "Add a module docstring to `app/api/tokens.py` explaining its responsibility.",
+        "Add a module docstring to `app/api/users.py` explaining its responsibility."
+      ],
+      "ask": "Where should a new engineer start?"
+    },
+    "reviewer": {
+      "label": "Code Reviewer",
+      "headline": "3 finding(s): 0 high, 0 medium, 3 low. No blocking issues; safe to approve with minor follow-ups.",
+      "findings": [
+        {
+          "rule": "broad-except-pass",
+          "severity": "low",
+          "file": "app/tasks.py",
+          "line": 52,
+          "message": "Catching bare `Exception` hides the real failure mode from callers and logs -- narrow it or re-raise.",
+          "confirmed": false
+        },
+        {
+          "rule": "long-parameter-list",
+          "severity": "low",
+          "file": "app/email.py",
+          "function": "send_email",
+          "message": "`send_email` takes 7 parameters -- consider a config object/dataclass; easy to pass args in the wrong order.",
+          "confirmed": false
+        },
+        {
+          "rule": "broad-except-pass",
+          "severity": "low",
+          "file": "app/models.py",
+          "line": 191,
+          "message": "Catching bare `Exception` hides the real failure mode from callers and logs -- narrow it or re-raise.",
+          "confirmed": false
+        }
+      ],
+      "confirmed_findings": [],
+      "pr_diff_reviewed": null,
+      "ask": "What should I fix first?"
+    },
+    "tester": {
+      "label": "Tester / QA",
+      "headline": "12.8% functions referenced in tests (no HTTP-client tests detected)",
+      "uncovered_endpoints": [
+        {
+          "method": "get",
+          "path": "/",
+          "source_file": "app/main/routes.py",
+          "function": "index"
+        },
+        {
+          "method": "post",
+          "path": "/",
+          "source_file": "app/main/routes.py",
+          "function": "index"
+        },
+        {
+          "method": "get",
+          "path": "/index",
+          "source_file": "app/main/routes.py",
+          "function": "index"
+        },
+        {
+          "method": "post",
+          "path": "/index",
+          "source_file": "app/main/routes.py",
+          "function": "index"
+        },
+        {
+          "method": "get",
+          "path": "/explore",
+          "source_file": "app/main/routes.py",
+          "function": "explore"
+        },
+        {
+          "method": "get",
+          "path": "/user/<username>",
+          "source_file": "app/main/routes.py",
+          "function": "user"
+        },
+        {
+          "method": "get",
+          "path": "/user/<username>/popup",
+          "source_file": "app/main/routes.py",
+          "function": "user_popup"
+        },
+        {
+          "method": "get",
+          "path": "/edit_profile",
+          "source_file": "app/main/routes.py",
+          "function": "edit_profile"
+        },
+        {
+          "method": "post",
+          "path": "/edit_profile",
+          "source_file": "app/main/routes.py",
+          "function": "edit_profile"
+        },
+        {
+          "method": "post",
+          "path": "/follow/<username>",
+          "source_file": "app/main/routes.py",
+          "function": "follow"
+        },
+        {
+          "method": "post",
+          "path": "/unfollow/<username>",
+          "source_file": "app/main/routes.py",
+          "function": "unfollow"
+        },
+        {
+          "method": "post",
+          "path": "/translate",
+          "source_file": "app/main/routes.py",
+          "function": "translate_text"
+        },
+        {
+          "method": "get",
+          "path": "/search",
+          "source_file": "app/main/routes.py",
+          "function": "search"
+        },
+        {
+          "method": "get",
+          "path": "/send_message/<recipient>",
+          "source_file": "app/main/routes.py",
+          "function": "send_message"
+        },
+        {
+          "method": "post",
+          "path": "/send_message/<recipient>",
+          "source_file": "app/main/routes.py",
+          "function": "send_message"
+        },
+        {
+          "method": "get",
+          "path": "/messages",
+          "source_file": "app/main/routes.py",
+          "function": "messages"
+        },
+        {
+          "method": "get",
+          "path": "/export_posts",
+          "source_file": "app/main/routes.py",
+          "function": "export_posts"
+        },
+        {
+          "method": "get",
+          "path": "/notifications",
+          "source_file": "app/main/routes.py",
+          "function": "notifications"
+        },
+        {
+          "method": "post",
+          "path": "/tokens",
+          "source_file": "app/api/tokens.py",
+          "function": "get_token"
+        },
+        {
+          "method": "delete",
+          "path": "/tokens",
+          "source_file": "app/api/tokens.py",
+          "function": "revoke_token"
+        },
+        {
+          "method": "get",
+          "path": "/users/<int:id>",
+          "source_file": "app/api/users.py",
+          "function": "get_user"
+        },
+        {
+          "method": "get",
+          "path": "/users",
+          "source_file": "app/api/users.py",
+          "function": "get_users"
+        },
+        {
+          "method": "get",
+          "path": "/users/<int:id>/followers",
+          "source_file": "app/api/users.py",
+          "function": "get_followers"
+        },
+        {
+          "method": "get",
+          "path": "/users/<int:id>/following",
+          "source_file": "app/api/users.py",
+          "function": "get_following"
+        },
+        {
+          "method": "post",
+          "path": "/users",
+          "source_file": "app/api/users.py",
+          "function": "create_user"
+        },
+        {
+          "method": "put",
+          "path": "/users/<int:id>",
+          "source_file": "app/api/users.py",
+          "function": "update_user"
+        },
+        {
+          "method": "get",
+          "path": "/login",
+          "source_file": "app/auth/routes.py",
+          "function": "login"
+        },
+        {
+          "method": "post",
+          "path": "/login",
+          "source_file": "app/auth/routes.py",
+          "function": "login"
+        },
+        {
+          "method": "get",
+          "path": "/logout",
+          "source_file": "app/auth/routes.py",
+          "function": "logout"
+        },
+        {
+          "method": "get",
+          "path": "/register",
+          "source_file": "app/auth/routes.py",
+          "function": "register"
+        },
+        {
+          "method": "post",
+          "path": "/register",
+          "source_file": "app/auth/routes.py",
+          "function": "register"
+        },
+        {
+          "method": "get",
+          "path": "/reset_password_request",
+          "source_file": "app/auth/routes.py",
+          "function": "reset_password_request"
+        },
+        {
+          "method": "post",
+          "path": "/reset_password_request",
+          "source_file": "app/auth/routes.py",
+          "function": "reset_password_request"
+        },
+        {
+          "method": "get",
+          "path": "/reset_password/<token>",
+          "source_file": "app/auth/routes.py",
+          "function": "reset_password"
+        },
+        {
+          "method": "post",
+          "path": "/reset_password/<token>",
+          "source_file": "app/auth/routes.py",
+          "function": "reset_password"
+        }
+      ],
+      "function_coverage": {
+        "total_functions": 78,
+        "referenced_functions": 10,
+        "pct": 12.8
+      },
+      "generated_test_file": "tests/test_devpilot_generated.py",
+      "test_run": {
+        "ran": true,
+        "failed_tests": [],
+        "raw_tail": "\n1 skipped in 0.01s"
+      },
+      "ask": "How much time did this run save?"
+    },
+    "release_manager": {
+      "label": "Release Manager",
+      "headline": "Recommendation: NO-GO",
+      "dependency_flags": [],
+      "deployment_checklist": [
+        {
+          "item": "Dockerfile present for reproducible deploys",
+          "status": "pass"
+        },
+        {
+          "item": "Health check endpoint available",
+          "status": "fail"
+        },
+        {
+          "item": "No unresolved high-severity code-review findings",
+          "status": "check with code_review agent output"
+        },
+        {
+          "item": "Dependency advisories reviewed",
+          "status": "pass"
+        },
+        {
+          "item": "Test coverage acceptable for changed endpoints",
+          "status": "check with testing agent output"
+        }
+      ],
+      "release_notes": {
+        "internal": [
+          "New endpoint: GET /tasks/search/by-owner (filter tasks by owner).",
+          "Note for reviewers: this endpoint is flagged by the code-review subagent for a SQL-injection risk -- do not ship until parameterized."
+        ],
+        "customer_facing": [
+          "No customer-facing changes in this release."
+        ]
+      },
+      "business_value": {
+        "total_hours_saved": 17.1,
+        "breakdown": [
+          "7.0h onboarding (24 undocumented modules + setup guide)",
+          "8.8h test writing (35 stub tests auto-generated)",
+          "1.0h release audit",
+          "0.3h modernization triage (2 item(s))"
+        ],
+        "breakdown_summary": "7.0h onboarding (24 undocumented modules + setup guide); 8.8h test writing (35 stub tests auto-generated); 1.0h release audit; 0.3h modernization triage (2 item(s))",
+        "caveat": "Illustrative estimate based on typical manual review/read/write times, not a measured or audited metric."
+      },
+      "ask": "Is it safe to release?"
+    }
+  },
+  "suggested_qa": [
+    {
+      "question": "What should I fix first?",
+      "answer": "Start with app/tasks.py: Catching bare `Exception` hides the real failure mode from callers and logs -- narrow it or re-raise..",
+      "source": "template"
+    },
+    {
+      "question": "Is it safe to release?",
+      "answer": "Recommendation: NO-GO. No blocking dependency issues.",
+      "source": "template"
+    },
+    {
+      "question": "Where should a new engineer start?",
+      "answer": "Start here: Add a module docstring to `app/__init__.py` explaining its responsibility.",
+      "source": "template"
+    },
+    {
+      "question": "How much time did this run save?",
+      "answer": "Roughly 17.1 hours of manual effort saved on this run (7.0h onboarding (24 undocumented modules + setup guide); 8.8h test writing (35 stub tests auto-generated); 1.0h release audit; 0.3h modernization triage (2 item(s))).",
+      "source": "template"
+    }
+  ],
+  "health": {
+    "score": 54,
+    "label": "Critical",
+    "color": "FF6F91",
+    "deductions": [
+      {
+        "reason": "Release readiness",
+        "points": 15.0
+      },
+      {
+        "reason": "Test coverage gap",
+        "points": 13.1
+      },
+      {
+        "reason": "Documentation gaps",
+        "points": 10
+      },
+      {
+        "reason": "Code review findings",
+        "points": 6.0
+      },
+      {
+        "reason": "Modernization opportunities",
+        "points": 2.0
+      }
+    ]
+  },
+  "executive_summary": {
+    "summary": "devpilot_clone_flhlmqkv scores 54/100 (Critical). No high-severity code-review findings this run. Release recommendation: NO-GO. This run is estimated to have saved about 17.1 hours of manual review, testing, and triage work.",
+    "source": "template"
+  },
+  "blast_radius": [],
+  "dependency_map": {
+    "nodes": [
+      "microblog.py",
+      "config.py",
+      "app/tasks.py",
+      "app/search.py",
+      "app/__init__.py",
+      "app/cli.py",
+      "app/translate.py",
+      "app/email.py",
+      "app/models.py",
+      "app/errors/__init__.py",
+      "app/errors/handlers.py",
+      "app/main/routes.py",
+      "app/main/__init__.py",
+      "app/main/forms.py",
+      "app/api/__init__.py",
+      "app/api/tokens.py",
+      "app/api/users.py",
+      "app/api/auth.py",
+      "app/api/errors.py",
+      "app/auth/routes.py",
+      "app/auth/__init__.py",
+      "app/auth/forms.py",
+      "app/auth/email.py"
+    ],
+    "edges": [
+      {
+        "from": "app/__init__.py",
+        "to": "config.py"
+      },
+      {
+        "from": "app/models.py",
+        "to": "app/search.py"
+      },
+      {
+        "from": "app/__init__.py",
+        "to": "app/cli.py"
+      },
+      {
+        "from": "app/main/routes.py",
+        "to": "app/translate.py"
+      },
+      {
+        "from": "app/auth/email.py",
+        "to": "app/email.py"
+      },
+      {
+        "from": "app/tasks.py",
+        "to": "app/email.py"
+      },
+      {
+        "from": "app/__init__.py",
+        "to": "app/models.py"
+      },
+      {
+        "from": "app/api/auth.py",
+        "to": "app/models.py"
+      },
+      {
+        "from": "app/api/users.py",
+        "to": "app/models.py"
+      },
+      {
+        "from": "app/auth/forms.py",
+        "to": "app/models.py"
+      },
+      {
+        "from": "app/auth/routes.py",
+        "to": "app/models.py"
+      },
+      {
+        "from": "app/main/forms.py",
+        "to": "app/models.py"
+      },
+      {
+        "from": "app/main/routes.py",
+        "to": "app/models.py"
+      },
+      {
+        "from": "app/tasks.py",
+        "to": "app/models.py"
+      },
+      {
+        "from": "microblog.py",
+        "to": "app/models.py"
+      },
+      {
+        "from": "app/errors/__init__.py",
+        "to": "app/errors/handlers.py"
+      },
+      {
+        "from": "app/main/__init__.py",
+        "to": "app/main/routes.py"
+      },
+      {
+        "from": "app/main/routes.py",
+        "to": "app/main/forms.py"
+      },
+      {
+        "from": "app/api/__init__.py",
+        "to": "app/api/tokens.py"
+      },
+      {
+        "from": "app/api/__init__.py",
+        "to": "app/api/users.py"
+      },
+      {
+        "from": "app/api/tokens.py",
+        "to": "app/api/auth.py"
+      },
+      {
+        "from": "app/api/users.py",
+        "to": "app/api/auth.py"
+      },
+      {
+        "from": "app/api/__init__.py",
+        "to": "app/api/errors.py"
+      },
+      {
+        "from": "app/api/auth.py",
+        "to": "app/api/errors.py"
+      },
+      {
+        "from": "app/api/users.py",
+        "to": "app/api/errors.py"
+      },
+      {
+        "from": "app/errors/handlers.py",
+        "to": "app/api/errors.py"
+      },
+      {
+        "from": "app/auth/__init__.py",
+        "to": "app/auth/routes.py"
+      },
+      {
+        "from": "app/auth/routes.py",
+        "to": "app/auth/forms.py"
+      },
+      {
+        "from": "app/auth/routes.py",
+        "to": "app/auth/email.py"
+      }
+    ],
+    "truncated": false,
+    "total_files": 23
+  },
+  "history": {
+    "runs_recorded": 1,
+    "trend": "not enough runs yet -- run DevPilot on this project again to start a trend",
+    "score_delta": null,
+    "recurring_rules": [],
+    "series": [
+      {
+        "t": 1790511626.2473202,
+        "score": 54
+      }
+    ]
+  },
+  "premortem": [],
+  "executive_intelligence": {
+    "health_score": 54,
+    "health_label": "Critical",
+    "release_recommendation": "NO-GO",
+    "hours_saved": 17.1,
+    "risk_portfolio": [],
+    "trend": "not enough runs yet -- run DevPilot on this project again to start a trend",
+    "score_delta": null,
+    "runs_recorded": 1,
+    "caveat": "Metrics like MTTR, MTBF, and cost-of-downtime need real production incident telemetry, which this static-analysis run doesn't have. Everything above comes directly from this run's own findings -- nothing here is a measured reliability statistic."
+  }
+}

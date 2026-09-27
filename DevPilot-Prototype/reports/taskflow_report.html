@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>DevPilot Report -- TaskFlow-API</title>
+<style>
+:root {
+  --pink:#FFD6EA; --pink-deep:#FF8FC7; --green:#CFF5DE; --green-deep:#57C98B;
+  --purple:#E7DBFF; --purple-deep:#A78BFA; --yellow:#FFF3B0; --yellow-deep:#F2C94C;
+  --bg:#FBF7FF; --card:#FFFFFF; --text:#3B3350; --muted:#8C82A6; --border:#F0E6FA;
+}
+* { box-sizing: border-box; }
+body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0 0 60px; background: var(--bg); color: var(--text); }
+a { color: var(--purple-deep); }
+.topbar { background: linear-gradient(120deg, var(--purple) 0%, var(--pink) 55%, var(--yellow) 100%); padding: 36px 40px 30px; }
+.topbar .eyebrow { color: #6b5a94; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 800; opacity: 0.9; }
+.topbar h1 { font-size: 28px; margin: 6px 0 4px; color: #3B3350; }
+.topbar .sub { color: #5A4E78; font-size: 13.5px; opacity: 0.95; }
+main { max-width: 1080px; margin: 0 auto; padding: 0 40px; }
+.hero { display: grid; grid-template-columns: 160px 1fr; gap: 28px; align-items: center; background: var(--card); border: 1px solid var(--border); border-radius: 22px; padding: 24px 28px; margin: -20px 0 24px; box-shadow: 0 14px 34px rgba(167,139,250,0.18); }
+.gauge { width: 140px; height: 140px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-direction: column; background: conic-gradient(#FF6F91 194.4deg, #F0EAFB 0deg); }
+.gauge-inner { width: 112px; height: 112px; border-radius: 50%; background: var(--card); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.gauge-inner .score { font-size: 32px; font-weight: 800; color: #FF6F91; }
+.gauge-inner .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
+.hero .summary h2 { margin: 0 0 8px; font-size: 15px; color: var(--purple-deep); text-transform: uppercase; letter-spacing: 0.06em; border: none; padding: 0; }
+.hero .summary p { margin: 0; font-size: 14.5px; line-height: 1.6; color: var(--text); }
+.hero .src-tag { display: inline-block; margin-top: 10px; font-size: 10.5px; color: var(--muted); }
+h2 { font-size: 16px; margin-top: 34px; border-bottom: 2px solid var(--border); padding-bottom: 8px; color: var(--text); }
+p { line-height: 1.55; }
+.grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 4px 0 20px; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; box-shadow: 0 4px 14px rgba(167,139,250,0.08); }
+.card .n { font-size: 21px; font-weight: 700; }
+.card .l { font-size: 11px; color: var(--muted); margin-top: 2px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+td, th { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; text-align: left; }
+th { color: var(--muted); font-weight: 600; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.03em; }
+.sev-high td:first-child, .sevpill.sev-high { color: #E0558F; font-weight: 700; }
+.sev-medium td:first-child, .sevpill.sev-medium { color: #C99A1E; font-weight: 700; }
+.sev-low td:first-child, .sevpill.sev-low { color: var(--muted); font-weight: 700; }
+.sevpill { font-size: 10px; letter-spacing: 0.03em; }
+.status-fail { color: #E0558F; font-weight: 700; }
+.status-pass { color: #3AAE73; font-weight: 700; }
+.status-attention { color: #C99A1E; font-weight: 700; }
+.bad { color: #E0558F; }
+.tag { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 700; }
+.tag.confirmed { background: var(--green); color: #1F8C57; }
+.tag.flagged { background: var(--yellow); color: #97701A; }
+.badge { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+.badge.go { background: var(--green); color: #1F8C57; }
+.badge.nogo { background: var(--pink); color: #C23A6E; }
+ul { margin: 8px 0; padding-left: 20px; font-size: 13px; line-height: 1.6; }
+.tabs { display: flex; gap: 6px; margin: 30px 0 0; flex-wrap: wrap; }
+.tab { padding: 9px 16px; border-radius: 999px; cursor: pointer; font-size: 13px; border: 1px solid var(--border); background: var(--card); color: var(--muted); font-weight: 600; }
+.tab.active { background: linear-gradient(90deg, var(--purple-deep), var(--pink-deep)); color: #fff; border-color: transparent; box-shadow: 0 6px 16px rgba(167,139,250,0.35); }
+.panel { display: none; border: 1px solid var(--border); border-radius: 18px; padding: 22px 24px; background: var(--card); margin-top: 12px; }
+.panel.active { display: block; }
+.qa { background: #FBF7FF; border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; margin-bottom: 8px; font-size: 13px; }
+.qa .q { font-weight: 700; color: #6b5a94; }
+.qa .a { margin-top: 4px; }
+.qa .src { color: var(--muted); font-size: 11px; }
+.fixcard { background: #FBF7FF; border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; margin-bottom: 14px; }
+.fixfile { font-weight: 700; color: var(--purple-deep); font-size: 13.5px; }
+.fixlist { color: var(--muted); font-size: 12.5px; margin: 4px 0 10px; }
+.diff { background: #2B2640; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; font-size: 12px; overflow-x: auto; white-space: pre; color: #E7DBFF; }
+.fixnote { font-size: 12.5px; color: var(--muted); margin-top: -8px; margin-bottom: 16px; }
+.brcard { display: grid; grid-template-columns: 240px 1fr; gap: 18px; align-items: center; background: #FBF7FF; border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 16px; }
+.brfile { font-weight: 700; color: var(--text); font-size: 13.5px; margin: 6px 0 4px; }
+.brmsg { font-size: 13px; color: var(--text); margin-bottom: 8px; }
+.brdeps { font-size: 12.5px; color: var(--muted); }
+.demo-box { background: #FBF7FF; border: 2px dashed var(--purple-deep); border-radius: 16px; padding: 40px 24px; text-align: center; color: var(--muted); font-size: 13.5px; }
+video { width: 100%; border-radius: 16px; border: 1px solid var(--border); }
+.pmcard { background: #FBF7FF; border: 1px solid var(--border); border-radius: 16px; padding: 16px 18px; margin-bottom: 16px; }
+.pmtitle { font-weight: 700; font-size: 14px; color: var(--text); }
+.pmnarrative { font-size: 13.5px; color: var(--text); margin: 8px 0; line-height: 1.6; }
+.pmtimeline { font-size: 12.5px; color: var(--muted); margin: 6px 0; padding-left: 20px; }
+.pmimpact, .pmprevent { font-size: 12.5px; margin: 6px 0; }
+.exec-card { background: linear-gradient(120deg, var(--purple) 0%, var(--pink) 100%); border-radius: 18px; padding: 20px; margin-bottom: 16px; }
+.exec-card .n { font-size: 26px; font-weight: 800; color: var(--text); }
+.exec-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.exec-caveat { font-size: 12px; color: var(--muted); margin-top: 12px; font-style: italic; }
+.hist-trend { display: inline-block; padding: 4px 12px; border-radius: 999px; font-weight: 700; font-size: 12.5px; }
+.hist-trend.improving { background: var(--green); color: #1F8C57; }
+.hist-trend.declining { background: var(--pink); color: #C23A6E; }
+.hist-trend.unchanged, .hist-trend.na { background: var(--yellow); color: #97701A; }
+</style></head>
+<body>
+<div class="topbar">
+  <div class="eyebrow">DevPilot &middot; IBM Bob 2.0 prototype</div>
+  <h1>TaskFlow-API</h1>
+  <div class="sub">6 subagents run in parallel &middot;
+  wall-clock 0.349s vs. 0.904s sequential &middot; Generated tests not executed (no uncovered endpoints).</div>
+</div>
+<main>
+
+<div class="hero">
+  <div class="gauge"><div class="gauge-inner"><div class="score">54</div><div class="label">Critical</div></div></div>
+  <div class="summary">
+    <h2>Executive summary</h2>
+    <p>TaskFlow-API scores 54/100 (Critical). The most urgent issue is in app/routers/tasks.py: Query text is built with string formatting instead of parameter binding -- classic SQL-injection entry point. Release recommendation: NO-GO. Versions before 5.4 default `yaml.load()` to the unsafe Loader, allowing arbitrary code execution on untrusted input (fixed by requiring an explicit Loader). This run is estimated to have saved about 4.9 hours of manual review, testing, and triage work.</p>
+    <span class="src-tag">Generated by template</span>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="card"><div class="n">7</div><div class="l">modules mapped</div></div>
+  <div class="card"><div class="n">1H / 2M</div><div class="l">review findings (0 confirmed)</div></div>
+  <div class="card"><div class="n">100.0%</div><div class="l">endpoint test coverage</div></div>
+  <div class="card"><div class="n"><span class="badge nogo">NO-GO</span></div><div class="l">release recommendation</div></div>
+  <div class="card"><div class="n">4.9h</div><div class="l">estimated hours saved</div></div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('all')">Full Report</div>
+  <div class="tab" onclick="showTab('dev')">New Developer</div>
+  <div class="tab" onclick="showTab('rev')">Reviewer</div>
+  <div class="tab" onclick="showTab('test')">Tester</div>
+  <div class="tab" onclick="showTab('rel')">Release Manager</div>
+  <div class="tab" onclick="showTab('fix')">Auto-Fix Preview</div>
+  <div class="tab" onclick="showTab('br')">Blast Radius</div>
+  <div class="tab" onclick="showTab('pm')">Pre-Mortem</div>
+  <div class="tab" onclick="showTab('exec')">Executive Intelligence</div>
+  <div class="tab" onclick="showTab('hist')">History</div>
+  <div class="tab" onclick="showTab('depmap')">Dependency Map</div>
+  <div class="tab" onclick="showTab('ask')">Ask DevPilot</div>
+  <div class="tab" onclick="showTab('demo')">Demo Video</div>
+</div>
+
+<div id="panel-all" class="panel active">
+
+<h2>1. Onboarding -- architecture map &amp; starter tasks</h2>
+<p>7 modules scanned, 248 lines. README: yes &middot; Dockerfile: yes</p>
+<table><tr><th>File</th><th>Functions</th><th>Classes</th><th>Documented</th></tr><tr><td>tests/test_devpilot_generated.py</td><td>8</td><td>0</td><td><span class="bad">no</span></td></tr><tr><td>app/routers/tasks.py</td><td>5</td><td>0</td><td><span class="bad">no</span></td></tr><tr><td>app/routers/users.py</td><td>4</td><td>0</td><td><span class="bad">no</span></td></tr><tr><td>app/database.py</td><td>2</td><td>0</td><td><span class="bad">no</span></td></tr><tr><td>app/models.py</td><td>0</td><td>4</td><td><span class="bad">no</span></td></tr><tr><td>tests/test_tasks.py</td><td>2</td><td>0</td><td><span class="bad">no</span></td></tr><tr><td>app/main.py</td><td>1</td><td>0</td><td><span class="bad">no</span></td></tr></table>
+<strong>Suggested starter tasks</strong><ul><li>Add a module docstring to `app/database.py` explaining its responsibility.</li><li>Add a module docstring to `app/main.py` explaining its responsibility.</li><li>Add a module docstring to `app/models.py` explaining its responsibility.</li><li>Add a module docstring to `app/routers/tasks.py` explaining its responsibility.</li><li>Add a module docstring to `app/routers/users.py` explaining its responsibility.</li><li>Add a module docstring to `tests/test_devpilot_generated.py` explaining its responsibility.</li></ul>
+
+<h2>2. Code review -- 3 finding(s): 1 high, 2 medium, 0 low. Blocking issues found -- recommend requesting changes before merge.</h2>
+<table><tr><th>Severity</th><th>Location</th><th>Finding</th><th>Status</th></tr><tr class='sev-high'><td>HIGH</td><td>app/routers/tasks.py:45</td><td>Query text is built with string formatting instead of parameter binding -- classic SQL-injection entry point.</td><td><span class="tag flagged">flagged</span></td></tr><tr class='sev-medium'><td>MEDIUM</td><td>app/routers/tasks.py :: get_task</td><td>`get_task` fetches a single row and returns it without checking for a missing/None result -- a bad id will raise a 500 instead of a 404.</td><td><span class="tag flagged">flagged</span></td></tr><tr class='sev-medium'><td>MEDIUM</td><td>app/routers/users.py :: get_user</td><td>`get_user` fetches a single row and returns it without checking for a missing/None result -- a bad id will raise a 500 instead of a 404.</td><td><span class="tag flagged">flagged</span></td></tr></table>
+<p><strong>PR diff reviewed:</strong> pr-142-search-by-owner.diff (1 of 9 added lines flagged)</p>
+<strong>Cross-agent confirmed findings</strong><ul><li><em>No cross-agent confirmations this run</em></li></ul>
+
+<h2>3. Testing -- 100.0% endpoint test coverage</h2>
+<table><tr><th>Method</th><th>Path</th><th>File</th></tr><tr><td colspan='3'><em>Full coverage</em></td></tr></table>
+<p>Function-level reference coverage (fallback metric, always available): 0/12 functions (0.0%) referenced somewhere in the test suite.</p>
+
+<h2>4. Release readiness -- recommendation: NO-GO</h2>
+<strong>Dependency advisories</strong><ul><li><strong>pyyaml==5.3</strong>: Versions before 5.4 default `yaml.load()` to the unsafe Loader, allowing arbitrary code execution on untrusted input (fixed by requiring an explicit Loader).</li></ul>
+<table><tr><th>Check</th><th>Status</th></tr><tr><td>Dockerfile present for reproducible deploys</td><td class='status-pass'>pass</td></tr><tr><td>Health check endpoint available</td><td class='status-pass'>pass</td></tr><tr><td>No unresolved high-severity code-review findings</td><td class='status-check'>check with code_review agent output</td></tr><tr><td>Dependency advisories reviewed</td><td class='status-attention'>attention</td></tr><tr><td>Test coverage acceptable for changed endpoints</td><td class='status-check'>check with testing agent output</td></tr></table>
+
+<h2>5. Modernization</h2>
+<p>1 modernization opportunity found across 12 functions (58.3% type-hinted).</p>
+<table><tr><th>Type</th><th>Location</th><th>Suggestion</th></tr><tr><td>dependency-pinning</td><td>requirements.txt</td><td>All 4 dependencies are pinned with exact `==` versions and no lock file -- security patches require a manual bump. Consider a lock file (pip-tools / poetry) with compatible-release ranges.</td></tr></table>
+
+<h2>6. Business value</h2>
+<p><strong>4.9 hours</strong> estimated saved this run: 2.8h onboarding (7 undocumented modules + setup guide); 1.0h code review (1 high, 2 medium findings); 1.0h release audit; 0.1h modernization triage (1 item(s)).</p>
+<p><em>Illustrative estimate based on typical manual review/read/write times, not a measured or audited metric.</em></p>
+
+<h2>7. Health score breakdown</h2>
+<p>Score starts at 100 and is docked for each issue category below; nothing here is a guess -- every deduction traces back to a specific finding elsewhere in this report.</p>
+<ul><li>Code review findings <strong>-22.0</strong></li><li>Release readiness <strong>-20.0</strong></li><li>Documentation gaps <strong>-3.5</strong></li><li>Modernization opportunities <strong>-1.0</strong></li></ul>
+
+</div>
+
+<div id="panel-dev" class="panel"><h2>For a new developer</h2>
+<strong>Setup</strong><ul><li>pip install -r requirements.txt</li><li>or: docker build -t app . && docker run -p 8000:8000 app</li><li>Entry point detected: app/main.py</li><li>Run the test suite first to confirm a clean baseline before changing anything.</li></ul>
+<strong>Architecture</strong><table><tr><th>File</th><th>Functions</th><th>Classes</th><th>Documented</th></tr><tr><td>tests/test_devpilot_generated.py</td><td>8</td><td>0</td><td><span class="bad">no</span></td></tr><tr><td>app/routers/tasks.py</td><td>5</td><td>0</td><td><span class="bad">no</span></td></tr><tr><td>app/routers/users.py</td><td>4</td><td>0</td><td><span class="bad">no</span></td></tr><tr><td>app/database.py</td><td>2</td><td>0</td><td><span class="bad">no</span></td></tr><tr><td>app/models.py</td><td>0</td><td>4</td><td><span class="bad">no</span></td></tr><tr><td>tests/test_tasks.py</td><td>2</td><td>0</td><td><span class="bad">no</span></td></tr><tr><td>app/main.py</td><td>1</td><td>0</td><td><span class="bad">no</span></td></tr></table>
+<strong>Start here</strong><ul><li>Add a module docstring to `app/database.py` explaining its responsibility.</li><li>Add a module docstring to `app/main.py` explaining its responsibility.</li><li>Add a module docstring to `app/models.py` explaining its responsibility.</li><li>Add a module docstring to `app/routers/tasks.py` explaining its responsibility.</li><li>Add a module docstring to `app/routers/users.py` explaining its responsibility.</li><li>Add a module docstring to `tests/test_devpilot_generated.py` explaining its responsibility.</li></ul>
+</div>
+
+<div id="panel-rev" class="panel"><h2>For a code reviewer</h2>
+<p>3 finding(s): 1 high, 2 medium, 0 low. Blocking issues found -- recommend requesting changes before merge.</p>
+<table><tr><th>Severity</th><th>Location</th><th>Finding</th><th>Status</th></tr><tr class='sev-high'><td>HIGH</td><td>app/routers/tasks.py:45</td><td>Query text is built with string formatting instead of parameter binding -- classic SQL-injection entry point.</td><td><span class="tag flagged">flagged</span></td></tr><tr class='sev-medium'><td>MEDIUM</td><td>app/routers/tasks.py :: get_task</td><td>`get_task` fetches a single row and returns it without checking for a missing/None result -- a bad id will raise a 500 instead of a 404.</td><td><span class="tag flagged">flagged</span></td></tr><tr class='sev-medium'><td>MEDIUM</td><td>app/routers/users.py :: get_user</td><td>`get_user` fetches a single row and returns it without checking for a missing/None result -- a bad id will raise a 500 instead of a 404.</td><td><span class="tag flagged">flagged</span></td></tr></table>
+<strong>Confirmed by execution</strong><ul><li><em>No cross-agent confirmations this run</em></li></ul>
+</div>
+
+<div id="panel-test" class="panel"><h2>For a tester</h2>
+<p>100.0% endpoint test coverage &middot; Generated tests not executed (no uncovered endpoints).</p>
+<table><tr><th>Method</th><th>Path</th><th>File</th></tr><tr><td colspan='3'><em>Full coverage</em></td></tr></table>
+</div>
+
+<div id="panel-rel" class="panel"><h2>For a release manager</h2>
+<p><span class="badge nogo">NO-GO</span></p>
+<strong>Dependency advisories</strong><ul><li><strong>pyyaml==5.3</strong>: Versions before 5.4 default `yaml.load()` to the unsafe Loader, allowing arbitrary code execution on untrusted input (fixed by requiring an explicit Loader).</li></ul>
+<table><tr><th>Check</th><th>Status</th></tr><tr><td>Dockerfile present for reproducible deploys</td><td class='status-pass'>pass</td></tr><tr><td>Health check endpoint available</td><td class='status-pass'>pass</td></tr><tr><td>No unresolved high-severity code-review findings</td><td class='status-check'>check with code_review agent output</td></tr><tr><td>Dependency advisories reviewed</td><td class='status-attention'>attention</td></tr><tr><td>Test coverage acceptable for changed endpoints</td><td class='status-check'>check with testing agent output</td></tr></table>
+<p><strong>4.9h</strong> estimated saved: 2.8h onboarding (7 undocumented modules + setup guide); 1.0h code review (1 high, 2 medium findings); 1.0h release audit; 0.1h modernization triage (1 item(s)).</p>
+</div>
+
+<div id="panel-fix" class="panel"><h2>Auto-Fix Preview</h2>
+<p class="fixnote">Preview only -- nothing on this page has been written to disk. Run with <code>--apply-fixes</code> (CLI) or use the Fix action in the web UI to actually apply and locally commit these changes; pushing to GitHub is always a separate, explicitly-confirmed step using your own token.</p>
+<div class='fixcard'><div class='fixfile'>app/routers/tasks.py</div><div class='fixlist'>Parameterized the query built from `query`.; Added a 404 for a missing row instead of letting `dict(None)` crash.</div><pre class='diff'>--- a/app/routers/tasks.py
++++ b/app/routers/tasks.py
+@@ -1,4 +1,4 @@
+-from fastapi import APIRouter
++from fastapi import APIRouter, HTTPException
+ from app.database import get_connection
+ from app.models import Task, TaskCreate
+ 
+@@ -33,6 +33,8 @@
+     conn = get_connection()
+     row = conn.execute("SELECT * FROM tasks WHERE id = ?", (task_id,)).fetchone()
+     conn.close()
++    if row is None:
++        raise HTTPException(status_code=404, detail="Not found")
+     return dict(row)
+ 
+ 
+@@ -42,8 +44,8 @@
+     # `owner` comes straight from the query string, so this is a classic
+     # SQL-injection entry point (e.g. owner=' OR '1'='1).
+     conn = get_connection()
+-    query = f"SELECT * FROM tasks WHERE owner = '{owner}'"
+-    rows = conn.execute(query).fetchall()
++    query = "SELECT * FROM tasks WHERE owner = ?"
++    rows = conn.execute(query, (owner,)).fetchall()
+     conn.close()
+     return [dict(r) for r in rows]
+ 
+</pre></div><div class='fixcard'><div class='fixfile'>app/routers/users.py</div><div class='fixlist'>Added a 404 for a missing row instead of letting `dict(None)` crash.</div><pre class='diff'>--- a/app/routers/users.py
++++ b/app/routers/users.py
+@@ -1,4 +1,4 @@
+-from fastapi import APIRouter
++from fastapi import APIRouter, HTTPException
+ from app.database import get_connection
+ from app.models import User, UserCreate
+ 
+@@ -30,6 +30,8 @@
+     conn = get_connection()
+     row = conn.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
+     conn.close()
++    if row is None:
++        raise HTTPException(status_code=404, detail="Not found")
+     return dict(row)
+ 
+ @router.put("/{user_id}/role")
+</pre></div><div class='fixcard'><div class='fixfile'>requirements.txt</div><div class='fixlist'>Bumped pyyaml to 6.0.1</div><pre class='diff'>--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,4 +1,4 @@
+ fastapi==0.68.0
+ uvicorn==0.15.0
+ pydantic==1.8.2
+-PyYAML==5.3
++PyYAML==6.0.1
+</pre></div>
+</div>
+
+<div id="panel-br" class="panel"><h2>Blast Radius -- if this breaks, what else does?</h2>
+<p>For each top finding, DevPilot searches the real import graph of this repo for files that depend on it -- a concrete, computed signal, not a simulation.</p>
+<div class='brcard'><div class='brsvg'><svg viewBox="0 0 240 240" width="240" height="240" xmlns="http://www.w3.org/2000/svg"><line x1="120.0" y1="120.0" x2="120.0" y2="36.0" stroke="#FF8FC7" stroke-width="1.5" stroke-opacity="0.55"/><circle cx="120.0" cy="36.0" r="15" fill="#FFFFFF" stroke="#FF8FC7" stroke-width="2"/><text x="120.0" y="64.0" text-anchor="middle" font-size="9.5" fill="#6b6483">main.py</text><circle cx="120.0" cy="120.0" r="30" fill="#FF8FC7" fill-opacity="0.18" stroke="#FF8FC7" stroke-width="2.5"/><text x="120.0" y="118.0" text-anchor="middle" font-size="11" font-weight="700" fill="#3B3350">tasks.py</text><text x="120.0" y="133.0" text-anchor="middle" font-size="9" fill="#6b6483">1 dependent(s)</text></svg></div><div class='brinfo'><span class='tag flagged'>flagged</span> <span class='sevpill sev-high'>HIGH</span><div class='brfile'>app/routers/tasks.py</div><div class='brmsg'>Query text is built with string formatting instead of parameter binding -- classic SQL-injection entry point.</div><div class='brdeps'>If this breaks, it directly affects <strong>1</strong> other file(s): app/main.py</div></div></div><div class='brcard'><div class='brsvg'><svg viewBox="0 0 240 240" width="240" height="240" xmlns="http://www.w3.org/2000/svg"><line x1="120.0" y1="120.0" x2="120.0" y2="36.0" stroke="#F2C94C" stroke-width="1.5" stroke-opacity="0.55"/><circle cx="120.0" cy="36.0" r="15" fill="#FFFFFF" stroke="#F2C94C" stroke-width="2"/><text x="120.0" y="64.0" text-anchor="middle" font-size="9.5" fill="#6b6483">main.py</text><circle cx="120.0" cy="120.0" r="30" fill="#F2C94C" fill-opacity="0.18" stroke="#F2C94C" stroke-width="2.5"/><text x="120.0" y="118.0" text-anchor="middle" font-size="11" font-weight="700" fill="#3B3350">tasks.py</text><text x="120.0" y="133.0" text-anchor="middle" font-size="9" fill="#6b6483">1 dependent(s)</text></svg></div><div class='brinfo'><span class='tag flagged'>flagged</span> <span class='sevpill sev-medium'>MEDIUM</span><div class='brfile'>app/routers/tasks.py :: get_task</div><div class='brmsg'>`get_task` fetches a single row and returns it without checking for a missing/None result -- a bad id will raise a 500 instead of a 404.</div><div class='brdeps'>If this breaks, it directly affects <strong>1</strong> other file(s): app/main.py</div></div></div><div class='brcard'><div class='brsvg'><svg viewBox="0 0 240 240" width="240" height="240" xmlns="http://www.w3.org/2000/svg"><line x1="120.0" y1="120.0" x2="120.0" y2="36.0" stroke="#F2C94C" stroke-width="1.5" stroke-opacity="0.55"/><circle cx="120.0" cy="36.0" r="15" fill="#FFFFFF" stroke="#F2C94C" stroke-width="2"/><text x="120.0" y="64.0" text-anchor="middle" font-size="9.5" fill="#6b6483">main.py</text><circle cx="120.0" cy="120.0" r="30" fill="#F2C94C" fill-opacity="0.18" stroke="#F2C94C" stroke-width="2.5"/><text x="120.0" y="118.0" text-anchor="middle" font-size="11" font-weight="700" fill="#3B3350">users.py</text><text x="120.0" y="133.0" text-anchor="middle" font-size="9" fill="#6b6483">1 dependent(s)</text></svg></div><div class='brinfo'><span class='tag flagged'>flagged</span> <span class='sevpill sev-medium'>MEDIUM</span><div class='brfile'>app/routers/users.py :: get_user</div><div class='brmsg'>`get_user` fetches a single row and returns it without checking for a missing/None result -- a bad id will raise a 500 instead of a 404.</div><div class='brdeps'>If this breaks, it directly affects <strong>1</strong> other file(s): app/main.py</div></div></div>
+</div>
+
+<div id="panel-pm" class="panel"><h2>Pre-Mortem Intelligence -- how this could fail</h2>
+<p>Plain-English failure scenarios for the top findings, built from this run's own severity, message, and blast-radius data -- not a simulation trained on incident history.</p>
+<div class='pmcard'><div class='pmtitle'>app/routers/tasks.py <span class='tag flagged'>flagged</span></div><p class='pmnarrative'>A request arrives with a crafted value instead of ordinary input. The query executes with that value spliced directly into SQL instead of bound as a parameter. The database returns rows the caller was never meant to see -- or a second statement executes outright. By the time anyone notices, the data has already been read, altered, or exfiltrated.</p><ol class='pmtimeline'><li>A request arrives with a crafted value instead of ordinary input.</li><li>The query executes with that value spliced directly into SQL instead of bound as a parameter.</li><li>The database returns rows the caller was never meant to see -- or a second statement executes outright.</li><li>By the time anyone notices, the data has already been read, altered, or exfiltrated.</li></ol><p class='pmimpact'>Blast radius: 1 other file(s) depend on app/routers/tasks.py, so the failure doesn't stay contained.</p><p class='pmprevent'><strong>Prevention:</strong> Query text is built with string formatting instead of parameter binding -- classic SQL-injection entry point. Fixing it now (see Auto-Fix) is the prevention strategy -- there's no monitoring workaround for a bug that's already in the code path.</p><span class='src-tag'>Generated by template</span></div><div class='pmcard'><div class='pmtitle'>app/routers/tasks.py :: get_task <span class='tag flagged'>flagged</span></div><p class='pmnarrative'>A caller requests a record with an id that doesn't exist (typo, stale link, deleted row). The lookup returns nothing, but the code doesn't check for that. The next line runs against a missing result and raises an unhandled exception. The caller gets a raw server error instead of a clean 404 -- and if this endpoint is popular, it shows up as a spike in noisy error-rate alerts.</p><ol class='pmtimeline'><li>A caller requests a record with an id that doesn't exist (typo, stale link, deleted row).</li><li>The lookup returns nothing, but the code doesn't check for that.</li><li>The next line runs against a missing result and raises an unhandled exception.</li><li>The caller gets a raw server error instead of a clean 404 -- and if this endpoint is popular, it shows up as a spike in noisy error-rate alerts.</li></ol><p class='pmimpact'>Blast radius: 1 other file(s) depend on app/routers/tasks.py, so the failure doesn't stay contained.</p><p class='pmprevent'><strong>Prevention:</strong> `get_task` fetches a single row and returns it without checking for a missing/None result -- a bad id will raise a 500 instead of a 404. Fixing it now (see Auto-Fix) is the prevention strategy -- there's no monitoring workaround for a bug that's already in the code path.</p><span class='src-tag'>Generated by template</span></div><div class='pmcard'><div class='pmtitle'>app/routers/users.py :: get_user <span class='tag flagged'>flagged</span></div><p class='pmnarrative'>A caller requests a record with an id that doesn't exist (typo, stale link, deleted row). The lookup returns nothing, but the code doesn't check for that. The next line runs against a missing result and raises an unhandled exception. The caller gets a raw server error instead of a clean 404 -- and if this endpoint is popular, it shows up as a spike in noisy error-rate alerts.</p><ol class='pmtimeline'><li>A caller requests a record with an id that doesn't exist (typo, stale link, deleted row).</li><li>The lookup returns nothing, but the code doesn't check for that.</li><li>The next line runs against a missing result and raises an unhandled exception.</li><li>The caller gets a raw server error instead of a clean 404 -- and if this endpoint is popular, it shows up as a spike in noisy error-rate alerts.</li></ol><p class='pmimpact'>Blast radius: 1 other file(s) depend on app/routers/users.py, so the failure doesn't stay contained.</p><p class='pmprevent'><strong>Prevention:</strong> `get_user` fetches a single row and returns it without checking for a missing/None result -- a bad id will raise a 500 instead of a 404. Fixing it now (see Auto-Fix) is the prevention strategy -- there's no monitoring workaround for a bug that's already in the code path.</p><span class='src-tag'>Generated by template</span></div>
+</div>
+
+<div id="panel-exec" class="panel"><h2>Executive Intelligence</h2>
+<div class="exec-card">
+  <div class="exec-grid">
+    <div><div class="n">54/100</div><div class="l">health score (Critical)</div></div>
+    <div><div class="n">NO-GO</div><div class="l">release recommendation</div></div>
+    <div><div class="n">4.9h</div><div class="l">estimated hours saved</div></div>
+    <div><div class="n">3</div><div class="l">standout risks this run</div></div>
+  </div>
+</div>
+<h2 style="margin-top:16px">Risk portfolio</h2>
+<table><tr><th>Status</th><th>Severity</th><th>Location</th><th>Blast radius</th><th>Finding</th></tr><tr><td><span class='tag flagged'>flagged</span></td><td class='sevpill sev-high'>HIGH</td><td>app/routers/tasks.py</td><td>1</td><td>Query text is built with string formatting instead of parameter binding -- classic SQL-injection entry point.</td></tr><tr><td><span class='tag flagged'>flagged</span></td><td class='sevpill sev-medium'>MEDIUM</td><td>app/routers/tasks.py :: get_task</td><td>1</td><td>`get_task` fetches a single row and returns it without checking for a missing/None result -- a bad id will raise a 500 instead of a 404.</td></tr><tr><td><span class='tag flagged'>flagged</span></td><td class='sevpill sev-medium'>MEDIUM</td><td>app/routers/users.py :: get_user</td><td>1</td><td>`get_user` fetches a single row and returns it without checking for a missing/None result -- a bad id will raise a 500 instead of a 404.</td></tr></table>
+<p class="exec-caveat">Metrics like MTTR, MTBF, and cost-of-downtime need real production incident telemetry, which this static-analysis run doesn't have. Everything above comes directly from this run's own findings -- nothing here is a measured reliability statistic.</p>
+</div>
+
+<div id="panel-hist" class="panel"><h2>Engineering Historian</h2>
+<p>2 run(s) recorded for this project &middot; trend: <span class="hist-trend improving">improving</span> (+18 vs. the previous run)</p>
+<svg viewBox="0 0 420 90" width="100%" height="90" xmlns="http://www.w3.org/2000/svg"><path d="M12.0,78.0 L408.0,12.0" fill="none" stroke="#FF8FC7" stroke-width="2.5"/><circle cx="12.0" cy="78.0" r="3.5" fill="#A78BFA"/><circle cx="408.0" cy="12.0" r="3.5" fill="#A78BFA"/></svg>
+<h2 style="margin-top:16px">Recurring patterns</h2>
+<p>Rules that keep showing up run after run -- these are architectural weaknesses, not one-off mistakes.</p>
+<ul><li><strong>sql-injection</strong> -- seen in 2 of the last 2 runs</li><li><strong>unchecked-lookup</strong> -- seen in 2 of the last 2 runs</li></ul>
+</div>
+
+<div id="panel-depmap" class="panel"><h2>Dependency Map</h2>
+<p>Every module in this repo and who imports whom -- the same real import-graph scan behind Blast Radius, applied to the whole codebase instead of just the top findings. Showing 7 of 7 Python modules.</p>
+<svg viewBox="0 0 460 460" width="100%" height="460" xmlns="http://www.w3.org/2000/svg"><line x1="362.9" y1="124.0" x2="230.0" y2="60.0" stroke="#A78BFA" stroke-width="1" stroke-opacity="0.32"/><line x1="156.2" y1="383.2" x2="230.0" y2="60.0" stroke="#A78BFA" stroke-width="1" stroke-opacity="0.32"/><line x1="64.3" y1="267.8" x2="230.0" y2="60.0" stroke="#A78BFA" stroke-width="1" stroke-opacity="0.32"/><line x1="156.2" y1="383.2" x2="395.7" y2="267.8" stroke="#A78BFA" stroke-width="1" stroke-opacity="0.32"/><line x1="64.3" y1="267.8" x2="395.7" y2="267.8" stroke="#A78BFA" stroke-width="1" stroke-opacity="0.32"/><line x1="362.9" y1="124.0" x2="156.2" y2="383.2" stroke="#A78BFA" stroke-width="1" stroke-opacity="0.32"/><line x1="362.9" y1="124.0" x2="64.3" y2="267.8" stroke="#A78BFA" stroke-width="1" stroke-opacity="0.32"/><circle cx="230.0" cy="60.0" r="6" fill="#FF8FC7" stroke="#fff" stroke-width="1.5"/><text x="230.0" y="50.0" font-size="8" fill="#6b6483" text-anchor="middle">database.py</text><circle cx="362.9" cy="124.0" r="6" fill="#FF8FC7" stroke="#fff" stroke-width="1.5"/><text x="362.9" y="114.0" font-size="8" fill="#6b6483" text-anchor="middle">main.py</text><circle cx="395.7" cy="267.8" r="6" fill="#FF8FC7" stroke="#fff" stroke-width="1.5"/><text x="395.7" y="257.8" font-size="8" fill="#6b6483" text-anchor="middle">models.py</text><circle cx="303.8" cy="383.2" r="6" fill="#FF8FC7" stroke="#fff" stroke-width="1.5"/><text x="303.8" y="373.2" font-size="8" fill="#6b6483" text-anchor="middle">__init__.py</text><circle cx="156.2" cy="383.2" r="6" fill="#FF8FC7" stroke="#fff" stroke-width="1.5"/><text x="156.2" y="373.2" font-size="8" fill="#6b6483" text-anchor="middle">tasks.py</text><circle cx="64.3" cy="267.8" r="6" fill="#FF8FC7" stroke="#fff" stroke-width="1.5"/><text x="64.3" y="257.8" font-size="8" fill="#6b6483" text-anchor="middle">users.py</text><circle cx="97.1" cy="124.0" r="6" fill="#FF8FC7" stroke="#fff" stroke-width="1.5"/><text x="97.1" y="114.0" font-size="8" fill="#6b6483" text-anchor="middle">__init__.py</text></svg>
+</div>
+
+<div id="panel-ask" class="panel"><h2>Ask DevPilot</h2><div class='qa'><div class='q'>Q: What should I fix first?</div><div class='a'>A: Start with app/routers/tasks.py: Query text is built with string formatting instead of parameter binding -- classic SQL-injection entry point.. <span class='src'>[template]</span></div></div><div class='qa'><div class='q'>Q: Is it safe to release?</div><div class='a'>A: Recommendation: NO-GO. Reason: Versions before 5.4 default `yaml.load()` to the unsafe Loader, allowing arbitrary code execution on untrusted input (fixed by requiring an explicit Loader). <span class='src'>[template]</span></div></div><div class='qa'><div class='q'>Q: Where should a new engineer start?</div><div class='a'>A: Start here: Add a module docstring to `app/database.py` explaining its responsibility. <span class='src'>[template]</span></div></div><div class='qa'><div class='q'>Q: How much time did this run save?</div><div class='a'>A: Roughly 4.9 hours of manual effort saved on this run (2.8h onboarding (7 undocumented modules + setup guide); 1.0h code review (1 high, 2 medium findings); 1.0h release audit; 0.1h modernization triage (1 item(s))). <span class='src'>[template]</span></div></div></div>
+
+<div id="panel-demo" class="panel"><h2>Demo Video</h2>
+<div class='demo-box'>No demo_video.mp4 found next to this report.<br>Drop one alongside devpilot_report.html (or serve it via the web UI) and it will play right here.</div>
+</div>
+
+</main>
+<script>
+function showTab(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body></html>

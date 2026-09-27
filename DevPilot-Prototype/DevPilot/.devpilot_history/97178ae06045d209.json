@@ -1,0 +1,26 @@
+[
+  {
+    "timestamp": 1790511623.0747824,
+    "project": "TaskFlow-API",
+    "score": 36,
+    "label": "Critical",
+    "high": 1,
+    "medium": 2,
+    "rules": [
+      "sql-injection",
+      "unchecked-lookup"
+    ]
+  },
+  {
+    "timestamp": 1790511624.2644455,
+    "project": "TaskFlow-API",
+    "score": 54,
+    "label": "Critical",
+    "high": 1,
+    "medium": 2,
+    "rules": [
+      "sql-injection",
+      "unchecked-lookup"
+    ]
+  }
+]

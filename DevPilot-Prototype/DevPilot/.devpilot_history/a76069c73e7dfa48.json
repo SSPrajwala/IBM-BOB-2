@@ -1,0 +1,50 @@
+[
+  {
+    "timestamp": 1790511626.2473202,
+    "project": "devpilot_clone_flhlmqkv",
+    "score": 54,
+    "label": "Critical",
+    "high": 0,
+    "medium": 0,
+    "rules": [
+      "broad-except-pass",
+      "long-parameter-list"
+    ]
+  },
+  {
+    "timestamp": 1790514317.251174,
+    "project": "devpilot_web_clone_08yuj5w8",
+    "score": 54,
+    "label": "Critical",
+    "high": 0,
+    "medium": 0,
+    "rules": [
+      "broad-except-pass",
+      "long-parameter-list"
+    ]
+  },
+  {
+    "timestamp": 1790514627.555462,
+    "project": "devpilot_web_clone_wfi121t7",
+    "score": 54,
+    "label": "Critical",
+    "high": 0,
+    "medium": 0,
+    "rules": [
+      "broad-except-pass",
+      "long-parameter-list"
+    ]
+  },
+  {
+    "timestamp": 1790515000.0032487,
+    "project": "devpilot_web_clone_r3j6nqas",
+    "score": 54,
+    "label": "Critical",
+    "high": 0,
+    "medium": 0,
+    "rules": [
+      "broad-except-pass",
+      "long-parameter-list"
+    ]
+  }
+]
