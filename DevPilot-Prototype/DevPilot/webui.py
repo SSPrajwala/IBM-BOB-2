@@ -910,8 +910,9 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def main():
+    default_port = int(os.environ.get("PORT", 8765))
     parser = argparse.ArgumentParser()
-    parser.add_argument("--port", type=int, default=8765)
+    parser.add_argument("--port", type=int, default=default_port)
     args = parser.parse_args()
 
     threading.Thread(target=_sweep_loop, daemon=True).start()

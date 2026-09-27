@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: devpilot
+    runtime: python
+    plan: free
+    rootDir: DevPilot-Prototype/DevPilot
+    buildCommand: "echo 'DevPilot is stdlib-only -- nothing to install'"
+    startCommand: "python3 webui.py"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
